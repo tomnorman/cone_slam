@@ -1,24 +1,25 @@
-installation
-ORBSLAM2:
-	C++11 or C++0x Compiler
-	
-	opencv 3.0:
-	https://docs.opencv.org/master/d7/d9f/tutorial_linux_install.html
-	
-	pangolin:
-	https://github.com/stevenlovegrove/Pangolin
+DEPENDENCIES:
+	ORBSLAM2 DEPENDENCIES:
+		C++11 or C++0x Compiler
+		
+		opencv 3.0:
+		https://docs.opencv.org/master/d7/d9f/tutorial_linux_install.html
+		
+		pangolin:
+		https://github.com/stevenlovegrove/Pangolin
 
-	eigen3:
-	sudo apt install libeigen3-dev
+		eigen3:
+		sudo apt install libeigen3-dev
 
-	BLAS and LAPACK:
-	sudo apt-get install libblas-dev
-	sudo apt-get install liblapack-dev
+		BLAS and LAPACK:
+		sudo apt-get install libblas-dev
+		sudo apt-get install liblapack-dev
 
 
-ROS:
-http://wiki.ros.org/ROS/Installation
+	ROS:
+	http://wiki.ros.org/ROS/Installation
 
+CATKIN COMMANDS:
 mkdir formula_ws
 cd formuls_ws
 mkdir src
@@ -26,5 +27,5 @@ catkin build
 echo 'source ~/formula_ws/devel/setup.bash' > ~/.bashrc
 exit
 
-
+RUN:
 roslaunch test slam.launch
