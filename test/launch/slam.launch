@@ -1,0 +1,6 @@
+<launch>
+
+  <!-- ORB_SLAM2 RGBD -->
+  <node pkg="orb_slam2" type="mono" name="mono" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find test)/params/camera_info.yaml"/>
+
+</launch>

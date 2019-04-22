@@ -1,0 +1,7 @@
+./Examples/Monocular/mono_kitti Vocabulary/ORBvoc.txt Examples/Monocular/KITTI00-02.yaml ./Examples/dataset/sequences/00/
+./Examples/Monocular/mono_kitti Vocabulary/ORBvoc.txt Examples/Monocular/cone_test.yaml ./Examples/cone_road/
+
+cd ROS
+./SLAM ../Examples/Monocular/cone_test.yaml
+rosbag play -r 1 -s 0 --pause ../Examples/servo_set/SERVO.bag /cam0/image_raw:=/camera/image_raw
+press space when ready
