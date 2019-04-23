@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>cone_map</name>
+  <version>1.0.0</version>
+  <description>cone map publisher</description>
+
+  <maintainer email="asdasdf@gmail.com">asdasdf</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+
+   <exec_depend>rospy</exec_depend>
+
+
+</package>

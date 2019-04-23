@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(test)
+project(semantic_slam)
 
 find_package(catkin REQUIRED)

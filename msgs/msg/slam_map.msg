@@ -1,3 +1,4 @@
+# slam_map.msg
 Header header
 geometry_msgs/Point[] points
 int32[] colors
