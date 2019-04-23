@@ -9,6 +9,7 @@ set(PACKAGE_DEPENDENCIES
   roscpp
   cv_bridge
   cmake_modules
+  custom_msgs
 )
 
 find_package(catkin REQUIRED COMPONENTS ${PACKAGE_DEPENDENCIES})
@@ -42,7 +43,19 @@ endif()
 find_package(Eigen3 REQUIRED)
 find_package(Pangolin REQUIRED)
 
+# add_message_files(
+#   FILES
+#   slam_map.msg
+# )
+
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+#   geometry_msgs
+# )
+
 catkin_package()
+
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 set(orb_slam2SRC
@@ -67,7 +80,6 @@ src/Initializer.cc
 src/Viewer.cc
 )
 
-
 include_directories(
 ${catkin_INCLUDE_DIRS}
 ${PROJECT_SOURCE_DIR}
@@ -76,9 +88,12 @@ ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
 )
 
+
 add_library(${PROJECT_NAME}
 ${orb_slam2SRC}
 )
+
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(${PROJECT_NAME}
 ${catkin_LIBRARIES}
@@ -98,27 +113,3 @@ ${catkin_LIBRARIES}
 ${PROJECT_NAME}
 )
 
-
-
-
-
-
-# set(LIBS 
-# ${catkin_LIBRARIES}
-# ${OpenCV_LIBS} 
-# ${EIGEN3_LIBS}
-# ${Pangolin_LIBRARIES}
-# ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
-# ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
-# ${PROJECT_SOURCE_DIR}/Thirdparty/darknet/libdarknet.so
-# ${PROJECT_SOURCE_DIR}/lib/libORB_SLAM2.so
-# )
-
-# # Node for monocular camera
-# rosbuild_add_executable(mono
-#   ros/ros_mono.cc
-# )
-
-# target_link_libraries(mono
-#  ${LIBS}
-# )
