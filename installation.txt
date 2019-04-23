@@ -23,6 +23,9 @@ CATKIN COMMANDS:
 mkdir formula_ws
 cd formuls_ws
 mkdir src
+git clone https://github.com/tomnorman/cone_slam.git
+cd orb_slam2
+./buil.sh
 catkin build
 echo 'source ~/formula_ws/devel/setup.bash' > ~/.bashrc
 exit
