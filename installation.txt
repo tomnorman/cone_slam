@@ -35,7 +35,7 @@ git clone https://github.com/tomnorman/cone_slam.git
 cd orb_slam2
 ./build.sh
 catkin build
-echo 'source ~/formula_ws/devel/setup.bash' > ~/.bashrc
+echo 'source ~/formula_ws/devel/setup.bash' >> ~/.bashrc
 exit
 
 RUN:
