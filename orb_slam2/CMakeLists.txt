@@ -9,7 +9,8 @@ set(PACKAGE_DEPENDENCIES
   roscpp
   cv_bridge
   cmake_modules
-  custom_msgs
+  std_msgs
+#  custom_msgs
 )
 
 find_package(catkin REQUIRED COMPONENTS ${PACKAGE_DEPENDENCIES})

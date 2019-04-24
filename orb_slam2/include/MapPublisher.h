@@ -10,7 +10,7 @@
 
 #include <ros/ros.h>
 
-#include <custom_msgs/slam_msg.h>
+#include <std_msgs/Float32MultiArray.h>
 
 #include <opencv2/core/core.hpp>
 
@@ -25,7 +25,7 @@ public:
 	MapPublisher(Map* pMap):mpMap(pMap) {
 		n.param("dbscan_radius", radius, 0.1);
 		n.param("dbscan_ep", ep, 3);
-		cone_map_pub = n.advertise<custom_msgs::slam_msg>("points_map", 1000);
+		cone_map_pub = n.advertise<std_msgs::Float32MultiArray>("points_map", 1000);
 
 	};
 

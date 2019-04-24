@@ -1,0 +1,3 @@
+obj_names: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/obj.names"
+cfg_file: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd.cfg"
+weights_file: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd_last.weights"

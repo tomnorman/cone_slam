@@ -26,12 +26,6 @@
 namespace ORB_SLAM2
 {
 
-static std::string  names_file = "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/obj.names";
-static std::string  cfg_file = "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd.cfg";
-static std::string  weights_file = "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd_last.weights";
-static double thresh = 0.8;
-static Detector detector(cfg_file, weights_file);
-
 long unsigned int Frame::nNextId=0;
 bool Frame::mbInitialComputations=true;
 float Frame::cx, Frame::cy, Frame::fx, Frame::fy, Frame::invfx, Frame::invfy;
@@ -207,6 +201,15 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     // detect objects
     auto cur_frame = imGray.clone();
     auto frame_size = cur_frame.size();
+
+    ros::NodeHandle n;
+
+    static std::string cfg_file;
+    static std::string weights_file;
+    n.param("cfg_file", cfg_file, string("~/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd.cfg"));
+    n.param("weights_file", weights_file, string("~/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd_last.weights"));
+    static double thresh = 0.8;
+    static Detector detector(cfg_file, weights_file);
     auto det_image = detector.mat_to_image_resize(cur_frame);
     auto current_image = det_image;
 
