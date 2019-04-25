@@ -17,6 +17,7 @@
 namespace ORB_SLAM2
 {
 
+
 typedef vector<pair<double,double> > PointsVec;
 
 class MapPublisher
@@ -25,7 +26,8 @@ public:
 	MapPublisher(Map* pMap):mpMap(pMap) {
 		n.param("dbscan_radius", radius, 0.1);
 		n.param("dbscan_ep", ep, 3);
-		cone_map_pub = n.advertise<std_msgs::Float32MultiArray>("points_map", 1000);
+		n.param("points_topic", topic_out, string("points_map"));
+		cone_map_pub = n.advertise<std_msgs::Float32MultiArray>(topic_out, 1000);
 
 	};
 
@@ -87,6 +89,7 @@ private:
 	ros::Publisher cone_map_pub;
 	double radius;
 	int ep;
+	string topic_out;
 
 };
 

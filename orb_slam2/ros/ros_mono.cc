@@ -32,6 +32,10 @@
 #include "../include/System.h"
 using namespace std;
 
+// global
+double crop;
+string image_topic;
+
 class ImageGrabber
 {
 public:
@@ -40,6 +44,7 @@ public:
     void GrabImage(const sensor_msgs::ImageConstPtr& msg);
 
     ORB_SLAM2::System* mpSLAM;
+    
 };
 
 int main(int argc, char **argv)
@@ -60,7 +65,9 @@ int main(int argc, char **argv)
     ImageGrabber igb(&SLAM);
 
     ros::NodeHandle nodeHandler;
-    ros::Subscriber sub = nodeHandler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage,&igb);
+    nodeHandler.param("crop_scale", crop, double(2));
+    nodeHandler.param("image_topic", image_topic, string("/camera/image_raw"));
+    ros::Subscriber sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImage, &igb);
 
     ros::spin();
 
@@ -80,12 +87,13 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptr;
     cv::Mat matOut;
+
     try
     {
         cv_ptr = cv_bridge::toCvShare(msg);
         int rows = cv_ptr->image.rows;
         int cols = cv_ptr->image.cols;
-        matOut = cv_ptr->image(cv::Range(int(rows/3), rows-1), cv::Range(0, cols-1));
+        matOut = cv_ptr->image(cv::Range(int(rows/crop), rows-1), cv::Range(0, cols-1));
     }
     catch (cv_bridge::Exception& e)
     {
