@@ -1,10 +1,10 @@
 # orb_slam2:
-image_topic: "/camera1/image_raw" #topic to get image
-crop: 1 #crop the image- 1:no crop
+image_topic: "/camera/image_raw" #topic to get image
+crop_scale: 1 #crop the image- 1:no crop
 dbscan_radius: 0.05
 dbscan_ep: 3
 points_topic: "points_map" #topic for MapPublisher to publish
-# cone_map: "cone_map" #topic for cone_map to publish
+cone_topic: "cone_map" #topic for cone_map to publish
 # yolo:
 obj_names: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/obj.names"
 cfg_file: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd.cfg"

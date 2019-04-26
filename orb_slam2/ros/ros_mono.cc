@@ -64,9 +64,11 @@ int main(int argc, char **argv)
 
     ImageGrabber igb(&SLAM);
 
+    string node_name = ros::this_node::getName();
     ros::NodeHandle nodeHandler;
-    nodeHandler.param("crop_scale", crop, double(2));
-    nodeHandler.param("image_topic", image_topic, string("/camera/image_raw"));
+
+    nodeHandler.param(node_name + "/crop_scale", crop, double(2));
+    nodeHandler.param(node_name + "/image_topic", image_topic, string("/camera/image_raw"));
     ros::Subscriber sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImage, &igb);
 
     ros::spin();

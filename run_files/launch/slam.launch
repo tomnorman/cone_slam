@@ -4,6 +4,8 @@
 	<node pkg="orb_slam2" type="mono" name="mono" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find run_files)/params/camera_info.yaml">
 		<rosparam command="load" file="$(find run_files)/params/cone_slam.yaml" />
 	</node>
-  <!-- <node pkg="cone_map" type="cone_map.py" name="cone_map" output="screen"/> -->
+	<node pkg="cone_map" type="cone_map.py" name="cone_map" output="screen">
+		<rosparam command="load" file="$(find run_files)/params/cone_slam.yaml" />
+	</node>
 
 </launch>

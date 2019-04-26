@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from geometry_msgs.msg import Point
-from custom_msgs.msg import slam_msg as smsg
+from std_msgs.msg import Float32MultiArray
 from sklearn.cluster import DBSCAN
 import numpy as np
 
@@ -12,10 +11,9 @@ def callBack(data):
 	data.points = arr
 	pub.publish(data)
 
-def create_Point_arr(points):
+def create_Float32MultiArray(points):
 	arr = []
-	for po in points:
-		arr = arr.append(Point(po[0],po[1],po[2]))
+	# something
 	return arr
 
 def create_np_arr(points):
@@ -27,8 +25,11 @@ def create_np_arr(points):
 def listener():
 	global pub
 	rospy.init_node('listener', anonymous = True)
-	rospy.subscriber("points_map", smsg, callBack)
-	pub = rospy.Publisher("cones_map", smsg, queue_size = 10)
+	name = rospy.get_name()
+	topic_in = rospy.get_param(name + '/points_topic', 'points_map1')
+	topic_out = rospy.get_param(name + 'cone_topic', 'cone_map1')
+	rospy.Subscriber(topic_in, Float32MultiArray, callBack)
+	pub = rospy.Publisher(topic_out, Float32MultiArray, queue_size = 10)
 	rospy.spin()
 
 if __name__ == '__main__':
