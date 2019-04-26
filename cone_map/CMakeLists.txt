@@ -8,8 +8,7 @@ project(cone_map)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
-  custom_msgs
+  std_msgs
   rospy
 )
 
@@ -70,7 +69,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   custom_msgs
+#  
 # )
 
 ################################################
@@ -105,7 +104,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
  LIBRARIES cone_map
- CATKIN_DEPENDS geometry_msgs custom_msgs rospy
+ CATKIN_DEPENDS std_msgs rospy
 #  DEPENDS system_lib
 )
 
