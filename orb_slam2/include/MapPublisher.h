@@ -24,9 +24,9 @@ class MapPublisher
 {
 public:
 	MapPublisher(Map* pMap):mpMap(pMap) {
-		n.param("dbscan_radius", radius, 0.1);
-		n.param("dbscan_ep", ep, 3);
-		n.param("points_topic", topic_out, string("points_map"));
+		n.param("/cone_slam/dbscan_radius", radius, 0.1);
+		n.param("/cone_slam/dbscan_ep", ep, 3);
+		n.param("/cone_slam/points_topic", topic_out, string("points_map"));
 		cone_map_pub = n.advertise<std_msgs::Float32MultiArray>(topic_out, 1000);
 
 	};

@@ -35,13 +35,15 @@ using namespace std;
 // global
 double crop;
 string image_topic;
+int RAW;
 
 class ImageGrabber
 {
 public:
     ImageGrabber(ORB_SLAM2::System* pSLAM):mpSLAM(pSLAM){}
 
-    void GrabImage(const sensor_msgs::ImageConstPtr& msg);
+    void GrabImage(const sensor_msgs::CompressedImageConstPtr& msg);
+    void GrabImageRaw(const sensor_msgs::ImageConstPtr& msg);
 
     ORB_SLAM2::System* mpSLAM;
     
@@ -51,26 +53,28 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "SLAM");
     ros::start();
-
     if(argc != 3)
     {
         cerr << endl << "Usage: rosrun ORB_SLAM2 Mono path_to_vocabulary path_to_settings" << endl;        
         ros::shutdown();
         return 1;
-    }    
+    }
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
     ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::MONOCULAR,true);
 
     ImageGrabber igb(&SLAM);
 
-    string node_name = ros::this_node::getName();
+    // ROS parameters
     ros::NodeHandle nodeHandler;
-
-    nodeHandler.param(node_name + "/crop_scale", crop, double(2));
-    nodeHandler.param(node_name + "/image_topic", image_topic, string("/camera/image_raw"));
-    ros::Subscriber sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImage, &igb);
-
+    nodeHandler.param("/cone_slam/crop_scale", crop, double(1));
+    nodeHandler.param("/cone_slam/image_topic", image_topic, string("/camera/image_raw"));
+    nodeHandler.param("/cone_slam/RAW", RAW, 0);
+    ros::Subscriber sub;
+    if(RAW)
+        sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImageRaw, &igb);
+    else
+        sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImage, &igb);
     ros::spin();
 
     // Stop all threads
@@ -84,7 +88,18 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
+void ImageGrabber::GrabImage(const sensor_msgs::CompressedImageConstPtr& msg)
+{
+    cv::Mat image_mat = cv::imdecode(cv::Mat(msg->data),1);
+    // image_mat = image_mat(cv::Range(int(rows/crop), rows-1), cv::Range(0, cols-1));
+
+    // Pass the image to the SLAM system
+    mpSLAM->TrackMonocular(image_mat,msg->header.stamp.toSec());
+}
+
+
+
+void ImageGrabber::GrabImageRaw(const sensor_msgs::ImageConstPtr& msg)
 {
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptr;
@@ -92,10 +107,10 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
 
     try
     {
-        cv_ptr = cv_bridge::toCvShare(msg);
+        cv_ptr = cv_bridge::toCvCopy(msg);
         int rows = cv_ptr->image.rows;
         int cols = cv_ptr->image.cols;
-        matOut = cv_ptr->image(cv::Range(int(rows/crop), rows-1), cv::Range(0, cols-1));
+        matOut = cv_ptr->image;
     }
     catch (cv_bridge::Exception& e)
     {
@@ -107,5 +122,3 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
     // Pass the image to the SLAM system
     mpSLAM->TrackMonocular(matOut,cv_ptr->header.stamp.toSec());
 }
-
-

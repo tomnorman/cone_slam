@@ -26,10 +26,10 @@ def listener():
 	global pub
 	rospy.init_node('listener', anonymous = True)
 	name = rospy.get_name()
-	topic_in = rospy.get_param(name + '/points_topic', 'points_map1')
-	topic_out = rospy.get_param(name + 'cone_topic', 'cone_map1')
-	rospy.Subscriber(topic_in, Float32MultiArray, callBack)
+	topic_in = rospy.get_param('/cone_slam/points_topic', 'points_map')
+	topic_out = rospy.get_param('/cone_slam/cone_topic', 'cone_map')
 	pub = rospy.Publisher(topic_out, Float32MultiArray, queue_size = 10)
+	rospy.Subscriber(topic_in, Float32MultiArray, callBack)
 	rospy.spin()
 
 if __name__ == '__main__':

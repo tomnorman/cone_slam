@@ -38,5 +38,6 @@ catkin build
 echo 'source ~/formula_ws/devel/setup.bash' >> ~/.bashrc
 exit
 
+
 RUN:
-roslaunch test slam.launch
+roslaunch run_files slam.launch

@@ -204,10 +204,10 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
 
     ros::NodeHandle n;
 
-    static std::string cfg_file;
-    static std::string weights_file;
-    n.param("cfg_file", cfg_file, string("~/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd.cfg"));
-    n.param("weights_file", weights_file, string("~/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny-cones_upd_last.weights"));
+    static string cfg_file;
+    static string weights_file;
+    n.param("/cone_slam/cfg_file", cfg_file, string("/yolov3-tiny-cones_upd.cfg"));
+    n.param("/cone_slam/weights_file", weights_file, string("/yolov3-tiny-cones_upd_last.weights"));
     static double thresh = 0.8;
     static Detector detector(cfg_file, weights_file);
     auto det_image = detector.mat_to_image_resize(cur_frame);
