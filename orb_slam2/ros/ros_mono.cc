@@ -97,20 +97,13 @@ void ImageGrabber::GrabImage(const sensor_msgs::CompressedImageConstPtr& msg)
     mpSLAM->TrackMonocular(image_mat,msg->header.stamp.toSec());
 }
 
-
-
 void ImageGrabber::GrabImageRaw(const sensor_msgs::ImageConstPtr& msg)
 {
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptr;
-    cv::Mat matOut;
-
     try
     {
-        cv_ptr = cv_bridge::toCvCopy(msg);
-        int rows = cv_ptr->image.rows;
-        int cols = cv_ptr->image.cols;
-        matOut = cv_ptr->image;
+        cv_ptr = cv_bridge::toCvShare(msg);
     }
     catch (cv_bridge::Exception& e)
     {
@@ -118,7 +111,5 @@ void ImageGrabber::GrabImageRaw(const sensor_msgs::ImageConstPtr& msg)
         return;
     }
 
-
-    // Pass the image to the SLAM system
-    mpSLAM->TrackMonocular(matOut,cv_ptr->header.stamp.toSec());
+    mpSLAM->TrackMonocular(cv_ptr->image,cv_ptr->header.stamp.toSec());
 }

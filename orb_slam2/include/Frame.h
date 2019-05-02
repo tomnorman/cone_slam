@@ -196,13 +196,13 @@ public:
     1-RED
     2-BLUE
     */
-    
+    vector<bbox_t> mvCones;
     // Corresponds to mvKeys, if cone -> what color
     std::vector<int> mvKeysCones;
 private:
     // fill mvKeysCones with classification
     bool PosInGrid(double x, double y, int &posX, int &posY);
-    void AssignKPToYOLO(const vector<bbox_t> &objects);
+    void AssignKPToYOLO();
 
 
 private:

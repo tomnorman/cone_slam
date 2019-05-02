@@ -1,1 +1,4 @@
 *.bag
+*.png
+/kitti
+/airsim_1

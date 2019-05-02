@@ -114,3 +114,10 @@ ${catkin_LIBRARIES}
 ${PROJECT_NAME}
 )
 
+# add_executable(mono_kitti
+# Examples/mono_kitti.cc
+# )
+# target_link_libraries(mono_kitti 
+# ${catkin_LIBRARIES}
+# ${PROJECT_NAME}
+# )

@@ -24,6 +24,7 @@
 #include "Tracking.h"
 #include "MapPoint.h"
 #include "Map.h"
+#include "Thirdparty/darknet/include/yolo_v2_class.hpp"
 
 #include<opencv2/core/core.hpp>
 #include<opencv2/features2d/features2d.hpp>
@@ -68,7 +69,12 @@ protected:
     std::mutex mMutex;
 
     // Cone stuff
+    vector<bbox_t> mvConesBoxes;
     vector<int> mvCones;
+    int NBoxes;
+
+    // ROS stuff
+    int debug_frame;
     
 };
 

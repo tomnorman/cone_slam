@@ -130,8 +130,8 @@ void Map::clear()
     for(set<MapPoint*>::iterator sit=mspMapPoints.begin(), send=mspMapPoints.end(); sit!=send; sit++)
         delete *sit;
 
-    for(set<MapPoint*>::iterator sit=mspConePoints.begin(), send=mspConePoints.end(); sit!=send; sit++)
-        delete *sit;
+    // for(set<MapPoint*>::iterator sit=mspConePoints.begin(), send=mspConePoints.end(); sit!=send; sit++)
+    //     delete *sit;
 
     for(set<KeyFrame*>::iterator sit=mspKeyFrames.begin(), send=mspKeyFrames.end(); sit!=send; sit++)
         delete *sit;

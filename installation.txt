@@ -41,3 +41,7 @@ exit
 
 RUN:
 roslaunch run_files slam.launch
+
+
+helpers:
+https://github.com/cehberlin/ORB_SLAM/pull/2

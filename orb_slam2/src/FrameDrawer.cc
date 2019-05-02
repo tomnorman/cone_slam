@@ -29,12 +29,12 @@
 namespace ORB_SLAM2
 {
 
-int debug_frame = 0;
-
 FrameDrawer::FrameDrawer(Map* pMap):mpMap(pMap)
 {
     mState=Tracking::SYSTEM_NOT_READY;
     mIm = cv::Mat(480,640,CV_8UC3, cv::Scalar(0,0,0));
+    ros::NodeHandle nodeHandler;
+    nodeHandler.param("/cone_slam/debug", debug_frame, 0);
 }
 
 cv::Mat FrameDrawer::DrawFrame()
@@ -46,7 +46,10 @@ cv::Mat FrameDrawer::DrawFrame()
     vector<bool> vbVO, vbMap; // Tracked MapPoints in current frame
     int state; // Tracking state
 
+    // Cone stuff
     vector<int> vCones;
+    vector<bbox_t> vConesBoxes;
+
     //Copy variables within scoped mutex
     {
         unique_lock<mutex> lock(mMutex);
@@ -59,6 +62,7 @@ cv::Mat FrameDrawer::DrawFrame()
         if(mState==Tracking::NOT_INITIALIZED)
         {
             vCones = mvCones;
+            vConesBoxes = mvConesBoxes;
             vCurrentKeys = mvCurrentKeys;
             vIniKeys = mvIniKeys;
             vMatches = mvIniMatches;
@@ -66,6 +70,7 @@ cv::Mat FrameDrawer::DrawFrame()
         else if(mState==Tracking::OK)
         {
             vCones = mvCones;
+            vConesBoxes = mvConesBoxes;
             vCurrentKeys = mvCurrentKeys;
             vbVO = mvbVO;
             vbMap = mvbMap;
@@ -73,6 +78,7 @@ cv::Mat FrameDrawer::DrawFrame()
         else if(mState==Tracking::LOST)
         {
             vCones = mvCones;
+            vConesBoxes = mvConesBoxes;
             vCurrentKeys = mvCurrentKeys;
         }
     } // destroy scoped mutex -> release mutex
@@ -98,11 +104,19 @@ cv::Mat FrameDrawer::DrawFrame()
         mnTrackedVO=0;
         const float r = 5;
         const int n = vCurrentKeys.size();
+        cv::Point2f pt1, pt2;
+        for (int i = 0; i < NBoxes; ++i)
+        {
+            pt1.x = vConesBoxes[i].x;
+            pt1.y = vConesBoxes[i].y;
+            pt2.x = pt1.x + vConesBoxes[i].w;
+            pt2.x = pt1.y - vConesBoxes[i].h;
+            cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
+        }
         for(int i=0;i<n;i++)
         {
             if(vbVO[i] || vbMap[i])
             {
-                cv::Point2f pt1,pt2;
                 pt1.x=vCurrentKeys[i].pt.x-r;
                 pt1.y=vCurrentKeys[i].pt.y-r;
                 pt2.x=vCurrentKeys[i].pt.x+r;
@@ -116,7 +130,7 @@ cv::Mat FrameDrawer::DrawFrame()
                         if (vCones[i] != -1)
                         {
                         cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,0));
-                        cv::circle(im,vCurrentKeys[i].pt,40,cv::Scalar(255,0,0),-1);
+                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,0,0),-1);
                         }
                     }
                     else
@@ -189,6 +203,9 @@ void FrameDrawer::Update(Tracking *pTracker)
     N = mvCurrentKeys.size();
     // Cones drawer
     mvCones=pTracker->mCurrentFrame.mvKeysCones;
+    mvConesBoxes=pTracker->mCurrentFrame.mvCones;
+    NBoxes = mvConesBoxes.size();
+
     mvbVO = vector<bool>(N,false);
     mvbMap = vector<bool>(N,false);
     mbOnlyTracking = pTracker->mbOnlyTracking;

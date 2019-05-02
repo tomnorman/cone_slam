@@ -198,7 +198,7 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     ExtractORB(0,imGray);
 
     // ADDED!!! ******* //
-    // detect objects
+    // detect cones
     auto cur_frame = imGray.clone();
     auto frame_size = cur_frame.size();
 
@@ -213,7 +213,7 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     auto det_image = detector.mat_to_image_resize(cur_frame);
     auto current_image = det_image;
 
-    vector<bbox_t> objects = detector.detect_resized(*current_image, frame_size.width, frame_size.height, thresh, false);
+    mvCones = detector.detect_resized(*current_image, frame_size.width, frame_size.height, thresh, false);
 
 
     N = mvKeys.size();
@@ -252,12 +252,12 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     mb = mbf/fx;
 
     AssignFeaturesToGrid();
-    AssignKPToYOLO(objects);
+    AssignKPToYOLO();
 }
 
-void Frame::AssignKPToYOLO(const vector<bbox_t> &objects)
+void Frame::AssignKPToYOLO()
 {
-    for (auto box : objects)
+    for (auto box : mvCones)
     {
         // for each yolo bounding box find the intersection
         // with the mGrid cells
