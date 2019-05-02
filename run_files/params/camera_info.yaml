@@ -4,7 +4,14 @@
 # Camera Parameters. Adjust them!
 #--------------------------------------------------------------------------------------------
 
-# Camera calibration and distortion parameters (OpenCV) 
+# Camera calibration and distortion parameters (OpenCV)
+# airsim
+# Camera.fx: 640.0
+# Camera.fy: 640.0
+# Camera.cx: 640.0
+# Camera.cy: 360.0
+
+# realsense
 Camera.fx: 641.057
 Camera.fy: 641.057
 Camera.cx: 631.513

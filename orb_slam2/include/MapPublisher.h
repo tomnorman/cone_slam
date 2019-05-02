@@ -52,20 +52,17 @@ public:
 		int cols = mOw.cols; // should be 1
 		m.layout.dim.push_back(std_msgs::MultiArrayDimension());
 		m.layout.dim[0].label = "rows";
-		m.layout.dim[0].size = 4*(rows+NRED+NBLUE); // first row1 is the mOw, all else is points
-		m.layout.dim[0].stride = 4*(rows+NRED+NBLUE);
+		m.layout.dim[0].size = 1+NRED+NBLUE; // first row1 is the mOw, all else is points
+		m.layout.dim[0].stride = 4*(1+NRED+NBLUE);
 		m.layout.dim.push_back(std_msgs::MultiArrayDimension());
 		m.layout.dim[1].label = "cols";
 		m.layout.dim[1].size = 4;
 		m.layout.dim[1].stride = 4;
 
-		// mOw
-		for (int i = 0; i < rows; ++i)
+		// mOw [3x1]
+		for (int i = 0; i < 3; ++i)
 		{
-			for (int j = 0; j < cols; ++j)
-			{
-				m.data.push_back(mOw.at<float>(i,j));
-			}
+			m.data.push_back(mOw.at<float>(0,i));
 		}
 		m.data.push_back(float(0.0)); // data[0,3] = 0
 
