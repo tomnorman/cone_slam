@@ -317,8 +317,8 @@ void Tracking::Track()
                         bOK = TrackReferenceKeyFrame();
                 }
 
-                // publish cones to the worls
-                mpPublish->PublishPoints();
+                // publish cones to the world
+                mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter());
             }
             else
             {

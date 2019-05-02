@@ -442,10 +442,7 @@ void LocalMapping::CreateNewMapPoints()
             // make the map point a cone with the same type
             int mpConeType = mpCurrentKeyFrame->mvKeysCones[idx1];
             if (mpConeType != -1 && mpConeType == pKF2->mvKeysCones[idx2])
-            {
-                cout << "same type " << mpConeType << endl;
                 pMP->mnConeType = mpConeType;
-            }
             else
                 pMP->mnConeType = -1; // no type
 

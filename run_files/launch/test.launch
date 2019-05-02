@@ -1,0 +1,7 @@
+<launch>
+
+	<rosparam command="load" file="$(find run_files)/params/cone_slam.yaml" />
+
+	<node pkg="cone_map" type="cone_map.py" name="cone_map" output="screen"/>
+
+</launch>

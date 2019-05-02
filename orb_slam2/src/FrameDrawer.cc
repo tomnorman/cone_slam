@@ -33,8 +33,6 @@ FrameDrawer::FrameDrawer(Map* pMap):mpMap(pMap)
 {
     mState=Tracking::SYSTEM_NOT_READY;
     mIm = cv::Mat(480,640,CV_8UC3, cv::Scalar(0,0,0));
-    ros::NodeHandle nodeHandler;
-    nodeHandler.param("/cone_slam/debug", debug_frame, 0);
 }
 
 cv::Mat FrameDrawer::DrawFrame()
@@ -107,6 +105,7 @@ cv::Mat FrameDrawer::DrawFrame()
         cv::Point2f pt1, pt2;
         for (int i = 0; i < NBoxes; ++i)
         {
+            // yolo bboxes
             pt1.x = vConesBoxes[i].x;
             pt1.y = vConesBoxes[i].y;
             pt2.x = pt1.x + vConesBoxes[i].w;
@@ -125,13 +124,11 @@ cv::Mat FrameDrawer::DrawFrame()
                 // This is a match to a MapPoint in the map
                 if(vbMap[i])
                 {
-                    if(debug_frame)
+                    if (vCones[i] != -1)
                     {
-                        if (vCones[i] != -1)
-                        {
-                        cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,0));
+                        // cones
+                        cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,255));
                         cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,0,0),-1);
-                        }
                     }
                     else
                     {

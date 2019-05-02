@@ -73,9 +73,6 @@ protected:
     vector<int> mvCones;
     int NBoxes;
 
-    // ROS stuff
-    int debug_frame;
-    
 };
 
 } //namespace ORB_SLAM
