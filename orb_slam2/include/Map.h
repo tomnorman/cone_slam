@@ -68,8 +68,8 @@ public:
 
     /*Cone stuff*/
     // return vector with only cone points
-    vector<MapPoint*> GetAllConePoints();
-    std::set<MapPoint*> mspConePoints;
+    vector<vector<float>> GetAllConePoints();
+    set<MapPoint*> mspConePoints;
 
 protected:
     std::set<MapPoint*> mspMapPoints;

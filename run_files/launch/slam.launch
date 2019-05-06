@@ -5,7 +5,7 @@
 		<!-- kitti -->
 			<!-- <node pkg="orb_slam2" type="mono" name="mono" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find test_files)/kitti/KITTI00-02.yaml" /> -->
 		<!-- airsim -->
-			<node pkg="orb_slam2" type="mono" name="mono" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find run_files)/params/camera_info.yaml" />
+			<node pkg="orb_slam2" type="mono" name="mono" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find run_files)/params/camera_info.yaml" launch-prefix="gdb -ex run --args"/>
 	
 	<!-- <node pkg="cone_map" type="cone_map.py" name="cone_map" output="screen"/> -->
 

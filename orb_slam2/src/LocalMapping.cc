@@ -447,9 +447,7 @@ void LocalMapping::CreateNewMapPoints()
                 pMP->mnConeType = -1; // no type
 
             // TODO:
-            // prone to alot of false positives, which are 
-            // ouliers in the kmeans performed later,
-            // cull mappoints if alot of other frames says something else
+            // ConeType maybe problomatic, should compare to more frames?
 
             pMP->AddObservation(mpCurrentKeyFrame,idx1);            
             pMP->AddObservation(pKF2,idx2);

@@ -6,11 +6,22 @@ import numpy as np
 
 def callBack(msg):
 	np_arr = create_np_arr(msg)
-	print np_arr.shape
 	#first row is position so ignore
-	if np_arr.shape[0] > 1:
-		mat = DBSCAN(eps = 0.5, min_samples = 2).fit_predict(np_arr[1:,:])
-		print mat
+	#second row is amount of cones
+	pose = np_arr[0]
+	NRED = np_arr[1,0];
+	NBLUE = np_arr[1,1];
+	non_cones = 2
+	if np_arr.shape[0] <= non_cones:
+		return
+	red_cones = np_arr[non_cones:non_cones+NRED]
+	blue_cones = np_arr[non_cones+NRED:]
+	if NRED:
+		red_labels = DBSCAN(eps = 0.5, min_samples = 2).fit_predict(red_cones)
+
+	if NBLUE:
+		blue_labels = DBSCAN(eps = 0.5, min_samples = 2).fit_predict(blue_cones)
+
 	# arr = create_Point_arr(points)
 	# data.points = arr
 	# pub.publish(data)

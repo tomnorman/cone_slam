@@ -95,10 +95,26 @@ vector<MapPoint*> Map::GetAllMapPoints()
     return vector<MapPoint*>(mspMapPoints.begin(),mspMapPoints.end());
 }
 
-vector<MapPoint*> Map::GetAllConePoints()
+vector<vector<float>> Map::GetAllConePoints()
 {
     unique_lock<mutex> lock(mMutexMap);
-    return vector<MapPoint*>(mspConePoints.begin(),mspConePoints.end());
+    // return vector<MapPoint*>(mspConePoints.begin(),mspConePoints.end());
+    vector<vector<float>> points;
+    for(auto &i : mspConePoints) // i is *pMap
+    {
+        cout << "got points\n";
+        // cone type
+        float mnConeType = static_cast<float>(i->mnConeType);
+        // postion in world
+        cv::Mat pPos = i->GetWorldPos();
+        float x = pPos.at<float>(0);
+        float y = pPos.at<float>(1);
+        float z = pPos.at<float>(2);
+
+        vector<float> tmp = {x,y,z, mnConeType};
+        points.push_back(tmp);
+    }
+    return points;
 }
 
 long unsigned int Map::MapPointsInMap()

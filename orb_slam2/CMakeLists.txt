@@ -79,6 +79,7 @@ src/KeyFrameDatabase.cc
 src/Sim3Solver.cc
 src/Initializer.cc
 src/Viewer.cc
+src/MapPublisher.cc
 )
 
 include_directories(

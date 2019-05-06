@@ -103,13 +103,14 @@ cv::Mat FrameDrawer::DrawFrame()
         const float r = 5;
         const int n = vCurrentKeys.size();
         cv::Point2f pt1, pt2;
+        
         for (int i = 0; i < NBoxes; ++i)
         {
             // yolo bboxes
             pt1.x = vConesBoxes[i].x;
             pt1.y = vConesBoxes[i].y;
             pt2.x = pt1.x + vConesBoxes[i].w;
-            pt2.x = pt1.y - vConesBoxes[i].h;
+            pt2.x = pt1.y + vConesBoxes[i].h;
             cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
         }
         for(int i=0;i<n;i++)
