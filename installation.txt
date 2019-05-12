@@ -41,6 +41,8 @@ exit
 
 RUN:
 roslaunch run_files slam.launch
+roslaunch run_files test.launch
+roslaunch realsense2_camera rs_camera.launch
 
 
 helpers:

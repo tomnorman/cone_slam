@@ -104,15 +104,15 @@ cv::Mat FrameDrawer::DrawFrame()
         const int n = vCurrentKeys.size();
         cv::Point2f pt1, pt2;
         
-        for (int i = 0; i < NBoxes; ++i)
-        {
-            // yolo bboxes
-            pt1.x = vConesBoxes[i].x;
-            pt1.y = vConesBoxes[i].y;
-            pt2.x = pt1.x + vConesBoxes[i].w;
-            pt2.x = pt1.y + vConesBoxes[i].h;
-            cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
-        }
+        // for (int i = 0; i < NBoxes; ++i)
+        // {
+        //     // yolo bboxes
+        //     pt1.x = vConesBoxes[i].x;
+        //     pt1.y = vConesBoxes[i].y;
+        //     pt2.x = pt1.x + vConesBoxes[i].w;
+        //     pt2.x = pt1.y + vConesBoxes[i].h;
+        //     cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
+        // }
         for(int i=0;i<n;i++)
         {
             if(vbVO[i] || vbMap[i])
@@ -125,11 +125,17 @@ cv::Mat FrameDrawer::DrawFrame()
                 // This is a match to a MapPoint in the map
                 if(vbMap[i])
                 {
-                    if (vCones[i] != -1)
+                    if (vCones[i] == 0)
                     {
                         // cones
                         cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,255));
-                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,0,0),-1);
+                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(0,255,255),-1);
+                    }
+                    else if (vCones[i] == 1)
+                    {
+                        // cones
+                        cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,255));
+                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,0,255),-1);
                     }
                     else
                     {
