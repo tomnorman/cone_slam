@@ -47,3 +47,8 @@ roslaunch realsense2_camera rs_camera.launch
 
 helpers:
 https://github.com/cehberlin/ORB_SLAM/pull/2
+
+
+yolo:
+cd cone_slam/orb_slam2/Thirdparty/darknet/build/darknet/x64
+./darknet detector test yolo_config/obj.data yolo_config/yolov3-tiny_obj.cfg yolo_config/yolov3-tiny_obj_36000.weights 
