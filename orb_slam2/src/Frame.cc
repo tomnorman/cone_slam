@@ -200,7 +200,7 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     // ADDED!!! ******* //
     // detect cones
     auto cur_frame = imGray.clone();
-    auto frame_size = cur_frame.size();
+    // auto frame_size = cur_frame.size();
 
     ros::NodeHandle n;
 
@@ -210,10 +210,10 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     n.param("/cone_slam/weights_file", weights_file, string("/yolov3-tiny-cones_upd_last.weights"));
     static double thresh = 0.8;
     static Detector detector(cfg_file, weights_file);
-    auto det_image = detector.mat_to_image_resize(cur_frame);
-    auto current_image = det_image;
+    // auto det_image = detector.mat_to_image_resize(cur_frame);
+    // auto current_image = det_image;
 
-    mvCones = detector.detect_resized(*current_image, frame_size.width, frame_size.height, thresh, false);
+    mvCones = detector.detect(cur_frame, thresh, false);
 
 
     N = mvKeys.size();
