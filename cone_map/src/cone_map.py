@@ -79,15 +79,18 @@ def create_Float32MultiArray(pose, yellow_cones, yellow, blue_cones, blue, none_
     FMA.layout.dim[1].stride = cols
     FMA.layout.data_offset = 0
     FMA.data = []
+
     #pose
     for i in range(pose.shape[0]):
         FMA.data += [pose[i]]
+
     #yellow cones
     for i in range(yellow_cones.shape[0]):
         for j in range(cols-1): #3D or 2D
             FMA.data += [yellow_cones[i][j]]
         FMA.data += [yellow]
         #each line is (x,y,z,color)
+
     #blue cones
     for i in range(blue_cones.shape[0]):
         for j in range(cols-1): #3D or 2D

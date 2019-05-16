@@ -35,7 +35,6 @@ private:
 	string topic_out;
 	ros::NodeHandle n;
 	ros::Publisher cone_map_pub;
-
 };
 
 } //namespace ORB_SLAM

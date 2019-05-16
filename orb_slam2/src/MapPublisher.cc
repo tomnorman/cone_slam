@@ -14,8 +14,8 @@ void MapPublisher::PublishPoints(cv::Mat mOw)
 	BLUEpoints.clear();
 	std_msgs::Float32MultiArray m;
 	MakeConeMap();
-	unsigned int NYELLOW = YELLOWpoints.size();
-	unsigned int NBLUE = BLUEpoints.size();
+	const unsigned int NYELLOW = YELLOWpoints.size();
+	const unsigned int NBLUE = BLUEpoints.size();
 	//cout << NYELLOW << " YELLOW cones, " << NBLUE << " blue cones.\n";
 
 	// Consts
@@ -29,9 +29,9 @@ void MapPublisher::PublishPoints(cv::Mat mOw)
 		...
 	*/
 
-	int mOwRows = mOw.rows; //should be 3
-	int cols = 4;
-	int rows = 2+NYELLOW+NBLUE; //first row-mOw, second row-amount of cones, all else is points
+	const int mOwRows = mOw.rows; //should be 3
+	const int cols = 4;
+	const int rows = 2+NYELLOW+NBLUE; //first row-mOw, second row-amount of cones, all else is points
 	m.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	m.layout.dim[0].label = "rows";
 	m.layout.dim[0].size = rows;
