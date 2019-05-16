@@ -62,7 +62,9 @@ def create_centers(samples, eps, min_samples):
     centers = []
     for i in range(clusters[-1]+1): #clusters[-1] == np.max(clusters)
         centers += [np.mean(samples[clusters == i],axis = 0)] #get the mean of the cluster
+        print centers[i]
         #TODO: geometric mean??
+    print '\n'
     return np.array(centers)
 
 

@@ -33,8 +33,8 @@
 
 #include <vector>
 #include <utility>
-#include<Eigen/Core>
-#include<Eigen/Cholesky>
+#include <Eigen/Core>
+#include <Eigen/Cholesky>
 
 
 namespace g2o {

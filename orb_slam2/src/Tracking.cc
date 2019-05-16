@@ -21,21 +21,23 @@
 
 #include "Tracking.h"
 
-#include<opencv2/core/core.hpp>
-#include<opencv2/features2d/features2d.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/features2d/features2d.hpp>
 
-#include"ORBmatcher.h"
-#include"FrameDrawer.h"
-#include"Converter.h"
-#include"Map.h"
-#include"Initializer.h"
+#include "Thirdparty/darknet/include/yolo_v2_class.hpp"
 
-#include"Optimizer.h"
-#include"PnPsolver.h"
+#include "ORBmatcher.h"
+#include "FrameDrawer.h"
+#include "Converter.h"
+#include "Map.h"
+#include "Initializer.h"
 
-#include<iostream>
+#include "Optimizer.h"
+#include "PnPsolver.h"
 
-#include<mutex>
+#include <iostream>
+
+#include <mutex>
 
 
 using namespace std;
@@ -48,6 +50,18 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
     mpKeyFrameDB(pKFDB), mpInitializer(static_cast<Initializer*>(NULL)), mpSystem(pSys), mpViewer(NULL),
     mpFrameDrawer(pFrameDrawer), mpMapDrawer(pMapDrawer), mpMap(pMap), mnLastRelocFrameId(0)
 {
+    // initialize yolo detector
+    ros::NodeHandle n;
+    n.param("/cone_slam/thresh", thresh, 0.8);
+    n.param("/cone_slam/cfg_file", cfg_file, string("/yolov3-tiny-cones_upd.cfg"));
+    n.param("/cone_slam/weights_file", weights_file, string("/yolov3-tiny-cones_upd_last.weights"));
+    cout << "yolo parameters:" << endl;
+    cout << "- thresh: " << thresh << endl;
+    cout << "- config file: " << cfg_file << endl;
+    cout << "- weights file: " << weights_file << endl << endl;
+
+    detector = new Detector(cfg_file, weights_file);
+
     // Load camera parameters from settings file
 
     cv::FileStorage fSettings(strSettingPath, cv::FileStorage::READ);
@@ -246,26 +260,38 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
     //float dummy_query_data[3] = {0};
     //cv::Mat dummy_query = cv::Mat(3, 1, CV_32F, dummy_query_data);
     //mpPublish->PublishPoints(dummy_query);
-
+    cv::Mat detectImage;
     if(mImGray.channels()==3)
     {
         if(mbRGB)
+        {
+            detectImage = mImGray.clone(); //for detector
             cvtColor(mImGray,mImGray,CV_RGB2GRAY);
+        }
         else
+        {
+            cvtColor(mImGray,detectImage,CV_BGR2RGB); //for detector
             cvtColor(mImGray,mImGray,CV_BGR2GRAY);
+        }
     }
     else if(mImGray.channels()==4)
     {
         if(mbRGB)
+        {
+            cvtColor(mImGray,detectImage,CV_RGBA2RGB); //for detector
             cvtColor(mImGray,mImGray,CV_RGBA2GRAY);
+        }
         else
+        {
+            cvtColor(mImGray,detectImage,CV_BGRA2RGB); //for detector
             cvtColor(mImGray,mImGray,CV_BGRA2GRAY);
+        }
     }
 
     if(mState==NOT_INITIALIZED || mState==NO_IMAGES_YET)
-        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
+        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detectImage,detector,thresh);
     else
-        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
+        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detectImage,detector,thresh);
     Track();
 
     return mCurrentFrame.mTcw.clone();

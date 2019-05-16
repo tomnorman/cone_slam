@@ -71,7 +71,7 @@ void MapPublisher::MakeConeMap()
 
 	//cout << "there are " << points.size() << " points\n";
 
-	// DEBUG
+	// DEBUG cone_map
 	//vector<vector<float>> points = {}; //empty
 	//vector<vector<float>> points = {{1,1,1,0}, {1.1,1,1,0}, {1,1.1,1,0}}; //close yellow points with 1 center
 	//vector<vector<float>> points = {{1,1,1,1}, {1.1,1,1,1}, {1,1.1,1,1}, {2,2,2,1}, {2.1,2,2,1}, {2,2.1,2,1}}; //2 blue centers
@@ -81,10 +81,10 @@ void MapPublisher::MakeConeMap()
 	//for all cone -> get vectors of YELLOW and BLUE
 	for(auto &i : points)
 	{
-		//cout <<static_cast<int>(i.back()) << " point type\n";
-		if (static_cast<int>(i.back()) == 0) //YELLOW
+		cout <<static_cast<int>(i.back()) << " point type\n";
+		if (static_cast<int>(i.back()) == YELLOWC)
 			YELLOWpoints.push_back(i);
-		else if(static_cast<int>(i.back()) == 1) //BLUE
+		else if(static_cast<int>(i.back()) == BLUEC)
 			BLUEpoints.push_back(i);
 	}
 }

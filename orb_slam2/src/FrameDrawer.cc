@@ -24,7 +24,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include<mutex>
+#include <mutex>
 
 namespace ORB_SLAM2
 {
@@ -125,17 +125,17 @@ cv::Mat FrameDrawer::DrawFrame()
                 // This is a match to a MapPoint in the map
                 if(vbMap[i])
                 {
-                    if (vCones[i] == 0)
+                    if (vCones[i] == YELLOWC)
                     {
                         // cones
-                        cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,255));
-                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(0,255,255),-1);
+                        cv::rectangle(im,pt1,pt2,cv::Scalar(255,255,0));
+                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,255,0),-1);
                     }
-                    else if (vCones[i] == 1)
+                    else if (vCones[i] == BLUEC)
                     {
                         // cones
-                        cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,255));
-                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,0,255),-1);
+                        cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
+                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(0,0,255),-1);
                     }
                     else
                     {

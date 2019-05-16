@@ -26,10 +26,10 @@
 #include "Map.h"
 #include "Thirdparty/darknet/include/yolo_v2_class.hpp"
 
-#include<opencv2/core/core.hpp>
-#include<opencv2/features2d/features2d.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/features2d/features2d.hpp>
 
-#include<mutex>
+#include <mutex>
 
 
 namespace ORB_SLAM2
