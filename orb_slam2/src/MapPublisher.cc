@@ -16,29 +16,29 @@ void MapPublisher::PublishPoints(cv::Mat mOw)
 	MakeConeMap();
 	unsigned int NYELLOW = YELLOWpoints.size();
 	unsigned int NBLUE = BLUEpoints.size();
-	// cout << NYELLOW << " YELLOW cones, " << NBLUE << " blue cones.\n";
+	//cout << NYELLOW << " YELLOW cones, " << NBLUE << " blue cones.\n";
 
 	// Consts
 	/*
 	create array msg:
-		mOw,0
-		NYELLOW,NBLUE,0,0
-		x1,y1,z1,color_enum
+		mOw               , 0
+		NYELLOW, NBLUE,  0, 0
+		x1     , y1   , z1, color_enum
 		...
-		xi,yi,zi,color_enum
+		xi     , yi   , zo, color_enum
 		...
 	*/
 
-	int mOwRows = mOw.rows; // should be 3
+	int mOwRows = mOw.rows; //should be 3
 	int cols = 4;
-	int rows = 2+NYELLOW+NBLUE; // first row-mOw, second row-amount of cones, all else is points
+	int rows = 2+NYELLOW+NBLUE; //first row-mOw, second row-amount of cones, all else is points
 	m.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	m.layout.dim[0].label = "rows";
 	m.layout.dim[0].size = rows;
 	m.layout.dim[0].stride = cols*rows;
 	m.layout.dim.push_back(std_msgs::MultiArrayDimension());
 	m.layout.dim[1].label = "cols";
-	m.layout.dim[1].size = cols; // for i>0: data[i,3] = cone type
+	m.layout.dim[1].size = cols; //for i>0: data[i,3] = cone type
 	m.layout.dim[1].stride = cols;
 	m.layout.data_offset = 0;
 
@@ -56,28 +56,35 @@ void MapPublisher::PublishPoints(cv::Mat mOw)
 	// YELLOWpoints
 	for (int i = 0; i < NYELLOW; ++i)
 		for (int j = 0; j < cols; ++j)
-			m.data.push_back(YELLOWpoints[i][j]); // x,y,z
+			m.data.push_back(YELLOWpoints[i][j]); //x,y,z
 
 	// BLUEpoints
 	for (int i = 0; i < NBLUE; ++i)
 		for (int j = 0; j < cols; ++j)
-			m.data.push_back(BLUEpoints[i][j]); // x,y,z
+			m.data.push_back(BLUEpoints[i][j]); //x,y,z
 	cone_map_pub.publish(m);
 }
 
 void MapPublisher::MakeConeMap()
 {
-	vector<vector<float>> points = mpMap->GetAllConePoints();
-	//returns 4D vector
-	// cout << "there are " << points.size() << " points\n";
+	vector<vector<float>> points = mpMap->GetAllConePoints(); //returns 4D vector (x,y,z, type)
 
-	// for all cone -> get vectors of YELLOW and BLUE
+	//cout << "there are " << points.size() << " points\n";
+
+	// DEBUG
+	//vector<vector<float>> points = {}; //empty
+	//vector<vector<float>> points = {{1,1,1,0}, {1.1,1,1,0}, {1,1.1,1,0}}; //close yellow points with 1 center
+	//vector<vector<float>> points = {{1,1,1,1}, {1.1,1,1,1}, {1,1.1,1,1}, {2,2,2,1}, {2.1,2,2,1}, {2,2.1,2,1}}; //2 blue centers
+	//vector<vector<float>> points = {{-10,0,0,1}, {3,3,0,1}}; //distant points - only ouliers
+	//vector<vector<float>> points = {{1,1,1,1}, {1.1,1,1,1}, {1,1.1,1,1}, {2,2,2,1}, {2.1,2,2,1}, {2,2.1,2,1}, {100, 100, 1,1 }}; //2 blue centers + outlier?
+
+	//for all cone -> get vectors of YELLOW and BLUE
 	for(auto &i : points)
 	{
-		// cout <<static_cast<int>(i.back()) << " point type\n";
-		if (static_cast<int>(i.back()) == 0) // YELLOW
+		//cout <<static_cast<int>(i.back()) << " point type\n";
+		if (static_cast<int>(i.back()) == 0) //YELLOW
 			YELLOWpoints.push_back(i);
-		else if(static_cast<int>(i.back()) == 1) // BLUE
+		else if(static_cast<int>(i.back()) == 1) //BLUE
 			BLUEpoints.push_back(i);
 	}
 }

@@ -17,8 +17,8 @@ def callBack(msg):
     #first row is position so ignore
     #second row is amount of cones so ignore
     pose = np_arr[0]
-    NYELLOW = np_arr[1,0];
-    NBLUE = np_arr[1,1];
+    NYELLOW = int(np_arr[1,0]);
+    NBLUE = int(np_arr[1,1]);
     none_cones = 2 #constant
     yellow_cones = np.array([])
     blue_cones = np.array([])
@@ -31,10 +31,17 @@ def callBack(msg):
             blue_cones = create_centers(blue_ORBs, eps, min_samples)
 
     FMA = create_Float32MultiArray(pose, yellow_cones, yellow, blue_cones, blue, none_cones, cols)
+
+    '''
+    posex, posey, posez, 0
+    x1   , y1   , z1   , color
+    ...
+    xi   , yi   , zi   , color
+    '''
     pub.publish(FMA)
 
 def create_centers(samples, eps, min_samples):
-    clusters = DBSCAN(eps = eps, min_samples = min_samples).fit_pyellowict(samples)
+    clusters = DBSCAN(eps = eps, min_samples = min_samples).fit_predict(samples)
     sorted_clusters_idxs = np.argsort(clusters)
     clusters = clusters[sorted_clusters_idxs]
     samples = samples[sorted_clusters_idxs] #clusteyellow smaples
@@ -60,7 +67,7 @@ def create_centers(samples, eps, min_samples):
 
 
 def create_Float32MultiArray(pose, yellow_cones, yellow, blue_cones, blue, none_cones, cols):
-    rows = none_cones+yellow_cones.shape[0]+blue_cones.shape[0]
+    rows = (none_cones-1)+yellow_cones.shape[0]+blue_cones.shape[0]
     FMA = Float32MultiArray()
     FMA.layout.dim.append(MultiArrayDimension())
     FMA.layout.dim[0].label = "rows"
@@ -80,11 +87,13 @@ def create_Float32MultiArray(pose, yellow_cones, yellow, blue_cones, blue, none_
         for j in range(cols-1): #3D or 2D
             FMA.data += [yellow_cones[i][j]]
         FMA.data += [yellow]
+        #each line is (x,y,z,color)
     #blue cones
     for i in range(blue_cones.shape[0]):
         for j in range(cols-1): #3D or 2D
             FMA.data += [blue_cones[i][j]]
         FMA.data += [blue]
+        #each line is (x,y,z,color)
 
     return FMA
 

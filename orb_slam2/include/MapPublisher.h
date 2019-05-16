@@ -30,7 +30,7 @@ private:
 	void MakeConeMap();
 
 	Map* mpMap;
-	vector<vector<float>> REDpoints, BLUEpoints;
+	vector<vector<float>> YELLOWpoints, BLUEpoints;
 	// ROS
 	string topic_out;
 	ros::NodeHandle n;

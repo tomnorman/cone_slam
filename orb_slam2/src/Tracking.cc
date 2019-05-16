@@ -241,6 +241,11 @@ cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, const d
 cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 {
     mImGray = im;
+    
+    // cone_map debug
+    // float dummy_query_data[3] = {0};
+    // cv::Mat dummy_query = cv::Mat(3, 1, CV_32F, dummy_query_data);
+    // mpPublish->PublishPoints(dummy_query);
 
     if(mImGray.channels()==3)
     {
