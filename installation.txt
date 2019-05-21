@@ -41,7 +41,7 @@ exit
 
 RUN:
 roslaunch run_files slam.launch
-roslaunch run_files test.launch
+roslaunch run_files map.launch
 roslaunch realsense2_camera rs_camera.launch
 
 g2o crashing solution:
