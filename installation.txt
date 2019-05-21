@@ -2,7 +2,7 @@ DEPENDENCIES:
 	ORBSLAM2 DEPENDENCIES:
 		C++11 or C++0x Compiler
 
-		opencv 3.0:
+		opencv 3.0: no need if installing ros kinetic
 		https://docs.opencv.org/master/d7/d9f/tutorial_linux_install.html
 
 		pangolin:
@@ -16,10 +16,10 @@ DEPENDENCIES:
 		sudo apt-get install liblapack-dev
 
 
-	ROS:
+	ROS: kinetic
 	http://wiki.ros.org/ROS/Installation
 
-	PYTHON:
+	PYTHON: can use conda
 	sudo apt install python-pip
 	exit
 	pip install numpy
@@ -44,18 +44,5 @@ roslaunch run_files slam.launch
 roslaunch run_files test.launch
 roslaunch realsense2_camera rs_camera.launch
 
-
-helpers:
+g2o crashing solution:
 https://github.com/cehberlin/ORB_SLAM/pull/2
-
-
-yolo:
-install:
-change Makefile in orb_slam2/Thirdparty/darknet
-cd cone_slam/orb_slam2/Thirdparty/darknet/build/darknet/x64
-../../../cmake-3.14.3-Linux-x86_64/bin/cmake ../../../
-make
-
-detect:
-cd cone_slam/orb_slam2/Thirdparty/darknet/build/darknet/x64
-./darknet detector test yolo_config/obj.data yolo_config/yolov3-tiny_obj.cfg yolo_config/yolov3-tiny_obj_36000.weights -thresh 0.25
