@@ -111,7 +111,10 @@ cv::Mat FrameDrawer::DrawFrame()
             pt1.y = vConesBoxes[i].y;
             pt2.x = pt1.x + vConesBoxes[i].w;
             pt2.y = pt1.y + vConesBoxes[i].h;
-            cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
+            if (vCones[i] == YELLOWC)
+                cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,255));
+            else if (vCones[i] == BLUEC)
+                cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,0));
         }
         for(int i=0;i<n;i++)
         {
@@ -128,14 +131,14 @@ cv::Mat FrameDrawer::DrawFrame()
                     if (vCones[i] == YELLOWC)
                     {
                         // cones
-                        cv::rectangle(im,pt1,pt2,cv::Scalar(255,255,0));
-                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,255,0),-1);
+                        cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,255));
+                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(0,255,255),-1);
                     }
                     else if (vCones[i] == BLUEC)
                     {
                         // cones
-                        cv::rectangle(im,pt1,pt2,cv::Scalar(0,0,255));
-                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(0,0,255),-1);
+                        cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,0));
+                        cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,0,0),-1);
                     }
                     else
                     {
@@ -146,8 +149,8 @@ cv::Mat FrameDrawer::DrawFrame()
                 }
                 else // This is match to a "visual odometry" MapPoint created in the last frame
                 {
-                    cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,0));
-                    cv::circle(im,vCurrentKeys[i].pt,2,cv::Scalar(255,0,0),-1);
+                    cv::rectangle(im,pt1,pt2,cv::Scalar(255,255,255));
+                    cv::circle(im,vCurrentKeys[i].pt,2,cv::Scalar(255,255,255),-1);
                     mnTrackedVO++;
                 }
             }

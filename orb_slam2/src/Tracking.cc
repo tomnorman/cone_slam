@@ -269,7 +269,8 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
     //float dummy_query_data[3] = {0};
     //cv::Mat dummy_query = cv::Mat(3, 1, CV_32F, dummy_query_data);
     //mpPublish->PublishPoints(dummy_query);
-    cv::Mat detectImage;
+
+    cv::Mat detectImage; // rgb image if needed
     if(mImGray.channels()==3)
     {
         if(mbRGB)
@@ -298,9 +299,9 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
     }
 
     if(mState==NOT_INITIALIZED || mState==NO_IMAGES_YET)
-        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detectImage,detector,thresh);
+        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh);
     else
-        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detectImage,detector,thresh);
+        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh);
     Track();
 
     return mCurrentFrame.mTcw.clone();

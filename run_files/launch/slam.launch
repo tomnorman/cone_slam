@@ -1,6 +1,6 @@
 <launch>
 
-	<rosparam command="load" file="$(find run_files)/params/cone_slam.yaml" />
+	<rosparam command="load" file="$(find run_files)/params/ros_params.yaml" />
 	<!-- ORB_SLAM2 RGBD -->
 		<!-- kitti -->
 			<!-- <node pkg="orb_slam2" type="mono" name="mono" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find test_files)/kitti/KITTI00-02.yaml" /> -->

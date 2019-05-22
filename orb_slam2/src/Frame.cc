@@ -179,7 +179,7 @@ Frame::Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeSt
 
 
 Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extractor, ORBVocabulary* voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth,
-             cv::Mat &detectImage, Detector* detector, const double thresh)
+             Detector* detector, const double thresh)
     :mpORBvocabulary(voc),mpORBextractorLeft(extractor),mpORBextractorRight(static_cast<ORBextractor*>(NULL)),
      mTimeStamp(timeStamp), mK(K.clone()),mDistCoef(distCoef.clone()), mbf(bf), mThDepth(thDepth)
 {
@@ -199,9 +199,9 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     ExtractORB(0,imGray);
 
     // detect cones
-    // auto cur_frame = detectImage.clone();
-    auto frame_size = detectImage.size();
-    auto det_image = detector->mat_to_image_resize(detectImage);
+    auto cur_frame = imGray.clone();
+    auto frame_size = cur_frame.size();
+    auto det_image = detector->mat_to_image_resize(cur_frame);
     auto current_image = det_image;
 
     mvCones = detector->detect_resized(*current_image, frame_size.width, frame_size.height, thresh, false);

@@ -33,7 +33,7 @@ namespace ORB_SLAM2
 {
 
 // cone colors
-enum Color {YELLOWC, BLUEC};
+enum Color {YELLOWC = 0, BLUEC};
 
 class MapPoint;
 class KeyFrame;
