@@ -50,21 +50,30 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
     mpKeyFrameDB(pKFDB), mpInitializer(static_cast<Initializer*>(NULL)), mpSystem(pSys), mpViewer(NULL),
     mpFrameDrawer(pFrameDrawer), mpMapDrawer(pMapDrawer), mpMap(pMap), mnLastRelocFrameId(0)
 {
+    // // initialize yolo detector from ros
+    // ros::NodeHandle n;
+    // n.param("/cone_slam/thresh", thresh, 0.8);
+    // n.param("/cone_slam/cfg_file", cfg_file, string("/yolov3-tiny-cones_upd.cfg"));
+    // n.param("/cone_slam/weights_file", weights_file, string("/yolov3-tiny-cones_upd_last.weights"));
+    // cout << "yolo parameters:" << endl;
+    // cout << "- thresh: " << thresh << endl;
+    // cout << "- config file: " << cfg_file << endl;
+    // cout << "- weights file: " << weights_file << endl << endl;
+
+
+    // Load parameters from settings file
+    cv::FileStorage fSettings(strSettingPath, cv::FileStorage::READ);
+
     // initialize yolo detector
-    ros::NodeHandle n;
-    n.param("/cone_slam/thresh", thresh, 0.8);
-    n.param("/cone_slam/cfg_file", cfg_file, string("/yolov3-tiny-cones_upd.cfg"));
-    n.param("/cone_slam/weights_file", weights_file, string("/yolov3-tiny-cones_upd_last.weights"));
+    string cfg_file     = fSettings["Yolo.Config"];
+    string weights_file = fSettings["Yolo.Weights"];
+    thresh              = fSettings["Yolo.Thresh"];
     cout << "yolo parameters:" << endl;
     cout << "- thresh: " << thresh << endl;
     cout << "- config file: " << cfg_file << endl;
-    cout << "- weights file: " << weights_file << endl << endl;
-
     detector = new Detector(cfg_file, weights_file);
 
-    // Load camera parameters from settings file
 
-    cv::FileStorage fSettings(strSettingPath, cv::FileStorage::READ);
     float fx = fSettings["Camera.fx"];
     float fy = fSettings["Camera.fy"];
     float cx = fSettings["Camera.cx"];

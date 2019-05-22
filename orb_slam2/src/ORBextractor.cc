@@ -1041,7 +1041,7 @@ static void computeDescriptors(const Mat& image, vector<KeyPoint>& keypoints, Ma
 }
 
 void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPoint>& _keypoints,
-                      OutputArray _descriptors)
+                      OutputArray _descriptors, int flag)
 { 
     if(_image.empty())
         return;
@@ -1057,20 +1057,27 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
     //ComputeKeyPointsOld(allKeypoints);
 
     Mat descriptors;
-
     int nkeypoints = 0;
     for (int level = 0; level < nlevels; ++level)
         nkeypoints += (int)allKeypoints[level].size();
     if( nkeypoints == 0 )
-        _descriptors.release();
+    {
+        if(flag != 1)
+        {
+            _descriptors.release();
+        }
+    }
     else
     {
         _descriptors.create(nkeypoints, 32, CV_8U);
         descriptors = _descriptors.getMat();
     }
 
-    _keypoints.clear();
-    _keypoints.reserve(nkeypoints);
+    if(flag != 1)
+    {
+        _keypoints.clear();
+        _keypoints.reserve(nkeypoints);
+    }
 
     int offset = 0;
     for (int level = 0; level < nlevels; ++level)

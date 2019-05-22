@@ -205,7 +205,15 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     auto current_image = det_image;
 
     mvCones = detector->detect_resized(*current_image, frame_size.width, frame_size.height, thresh, false);
-
+    // if(mvCones.size())
+    // {
+    //     cout << "x " << mvCones[0].x << " w "<< mvCones[0].w << " y " << mvCones[0].y << " h "<< mvCones[0].h<<endl;
+    //     int x = mvCones[0].x;
+    //     int w = mvCones[0].w;
+    //     int y = mvCones[0].y;
+    //     int h = mvCones[0].h;
+    //     ExtractORB(1,imGray(cv::Range(x, x+w),cv::Range(y, y+h)));
+    // }
 
     N = mvKeys.size();
     mvKeysCones.assign(N, -1);
@@ -306,9 +314,11 @@ void Frame::AssignFeaturesToGrid()
 void Frame::ExtractORB(int flag, const cv::Mat &im)
 {
     if(flag==0)
-        (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors);
+        (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors, flag);
+    else if(flag==1)
+        (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors, flag);
     else
-        (*mpORBextractorRight)(im,cv::Mat(),mvKeysRight,mDescriptorsRight);
+        (*mpORBextractorRight)(im,cv::Mat(),mvKeysRight,mDescriptorsRight, flag);
 }
 
 void Frame::SetPose(cv::Mat Tcw)

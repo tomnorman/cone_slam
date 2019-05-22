@@ -24,7 +24,7 @@
 #include <vector>
 #include <list>
 #include <opencv/cv.h>
-
+#include <stdio.h>
 
 namespace ORB_SLAM2
 {
@@ -58,7 +58,7 @@ public:
     // Mask is ignored in the current implementation.
     void operator()( cv::InputArray image, cv::InputArray mask,
       std::vector<cv::KeyPoint>& keypoints,
-      cv::OutputArray descriptors);
+      cv::OutputArray descriptors, int flag);
 
     int inline GetLevels(){
         return nlevels;}
