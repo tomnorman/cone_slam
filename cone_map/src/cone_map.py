@@ -71,11 +71,11 @@ def create_Float32MultiArray(pose, yellow_cones, yellow, blue_cones, blue, none_
     rows = (none_cones-1)+yellow_cones.shape[0]+blue_cones.shape[0]
     FMA = Float32MultiArray()
     FMA.layout.dim.append(MultiArrayDimension())
-    FMA.layout.dim[0].label = "rows"
+    FMA.layout.dim[0].label = "height"
     FMA.layout.dim[0].size = rows
     FMA.layout.dim[0].stride = cols*rows;
     FMA.layout.dim.append(MultiArrayDimension())
-    FMA.layout.dim[1].label = "cols"
+    FMA.layout.dim[1].label = "width"
     FMA.layout.dim[1].size = cols
     FMA.layout.dim[1].stride = cols
     FMA.layout.data_offset = 0
@@ -107,7 +107,7 @@ def create_np_arr(msg):
     dim0 = layout.dim[0]
     dim1 = layout.dim[1]
     rows = dim0.size
-    cols = dim1.size
+    cols = dim1.stride
     arr = []
     for i in range(rows):
         row = []
@@ -121,7 +121,7 @@ def listener():
     rospy.init_node('listener', anonymous = True)
     topic_in = rospy.get_param('/cone_slam/points_topic', 'points_map')
     topic_out = rospy.get_param('/cone_slam/cone_topic', 'cone_map')
-    pub = rospy.Publisher(topic_out, Float32MultiArray, queue_size = 10)
+    pub = rospy.Publisher(topic_out, Float32MultiArray, queue_size = 100)
     rospy.Subscriber(topic_in, Float32MultiArray, callBack)
     rospy.spin()
 

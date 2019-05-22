@@ -33,11 +33,11 @@ void MapPublisher::PublishPoints(cv::Mat mOw)
 	const int cols = 4;
 	const int rows = 2+NYELLOW+NBLUE; //first row-mOw, second row-amount of cones, all else is points
 	m.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	m.layout.dim[0].label = "rows";
+	m.layout.dim[0].label = "height";
 	m.layout.dim[0].size = rows;
 	m.layout.dim[0].stride = cols*rows;
 	m.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	m.layout.dim[1].label = "cols";
+	m.layout.dim[1].label = "width";
 	m.layout.dim[1].size = cols; //for i>0: data[i,3] = cone type
 	m.layout.dim[1].stride = cols;
 	m.layout.data_offset = 0;
