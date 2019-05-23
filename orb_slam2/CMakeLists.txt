@@ -10,7 +10,7 @@ set(PACKAGE_DEPENDENCIES
   cv_bridge
   cmake_modules
   std_msgs
-#  custom_msgs
+  custom_msgs
 )
 
 find_package(catkin REQUIRED COMPONENTS ${PACKAGE_DEPENDENCIES})

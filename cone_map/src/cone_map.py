@@ -1,44 +1,37 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import Float32MultiArray, MultiArrayLayout, MultiArrayDimension
+from custom_msgs.msg import slam_in
 from sklearn.cluster import DBSCAN
 import numpy as np
 
 def callBack(msg):
     # DBSCAN consts
-    eps = 0.5
-    min_samples = 2
-    # Float32MultiArray consts
-    cols = 4 #3D == 4, 2D == 3
-    yellow = 0 #number to identify cone
-    blue = 1 #number to identify cone
+    eps = 0.02
+    min_samples = 3
 
-    np_arr = create_np_arr(msg)
-    #first row is position so ignore
-    #second row is amount of cones so ignore
-    pose = np_arr[0]
-    NYELLOW = int(np_arr[1,0]);
-    NBLUE = int(np_arr[1,1]);
-    none_cones = 2 #constant
+    yellow = 121 #number to identify cone
+    blue = 98 #number to identify cone
+
+    NYELLOW = msg.NYELLOW
+    NBLUE = msg.NBLUE
+
+    yellow_points = np.array([np.array(msg.yellow_x), np.array(msg.yellow_y)]).T
+    print yellow_points
+    blue_points = np.array([np.array(msg.blue_x), np.array(msg.blue_y)]).T
+    print blue_points
+
+    pose = np.array([msg.pos_x, msg.pos_y])
+
+    normal = np.array([msg.normal_x, msg.normal_y])
+
     yellow_cones = np.array([])
     blue_cones = np.array([])
-    if np_arr.shape[0] > none_cones:
-        if NYELLOW:
-            yellow_ORBs = np_arr[none_cones:none_cones+NYELLOW]
-            yellow_cones = create_centers(yellow_ORBs, eps, min_samples)
-        if NBLUE:
-            blue_ORBs = np_arr[none_cones+NYELLOW:]
-            blue_cones = create_centers(blue_ORBs, eps, min_samples)
-
-    FMA = create_Float32MultiArray(pose, yellow_cones, yellow, blue_cones, blue, none_cones, cols)
-
-    '''
-    posex, posey, posez, 0
-    x1   , y1   , z1   , color
-    ...
-    xi   , yi   , zi   , color
-    '''
-    pub.publish(FMA)
+    if NYELLOW:
+        yellow_cones = create_centers(yellow_points, eps, min_samples)
+        print yellow_cones.shape , 'yellow'
+    if NBLUE:
+        blue_cones = create_centers(blue_points, eps, min_samples)
+        print blue_cones.shape , 'blue'
 
 def create_centers(samples, eps, min_samples):
     clusters = DBSCAN(eps = eps, min_samples = min_samples).fit_predict(samples)
@@ -66,41 +59,6 @@ def create_centers(samples, eps, min_samples):
         #TODO: geometric mean??
     return np.array(centers)
 
-
-def create_Float32MultiArray(pose, yellow_cones, yellow, blue_cones, blue, none_cones, cols):
-    rows = (none_cones-1)+yellow_cones.shape[0]+blue_cones.shape[0]
-    FMA = Float32MultiArray()
-    FMA.layout.dim.append(MultiArrayDimension())
-    FMA.layout.dim[0].label = "height"
-    FMA.layout.dim[0].size = rows
-    FMA.layout.dim[0].stride = cols*rows;
-    FMA.layout.dim.append(MultiArrayDimension())
-    FMA.layout.dim[1].label = "width"
-    FMA.layout.dim[1].size = cols
-    FMA.layout.dim[1].stride = cols
-    FMA.layout.data_offset = 0
-    FMA.data = []
-
-    #pose
-    for i in range(pose.shape[0]):
-        FMA.data += [pose[i]]
-
-    #yellow cones
-    for i in range(yellow_cones.shape[0]):
-        for j in range(cols-1): #3D or 2D
-            FMA.data += [yellow_cones[i][j]]
-        FMA.data += [yellow]
-        #each line is (x,y,z,color)
-
-    #blue cones
-    for i in range(blue_cones.shape[0]):
-        for j in range(cols-1): #3D or 2D
-            FMA.data += [blue_cones[i][j]]
-        FMA.data += [blue]
-        #each line is (x,y,z,color)
-
-    return FMA
-
 def create_np_arr(msg):
     data = msg.data
     layout = msg.layout
@@ -121,8 +79,8 @@ def listener():
     rospy.init_node('listener', anonymous = True)
     topic_in = rospy.get_param('/cone_slam/points_topic', 'points_map')
     topic_out = rospy.get_param('/cone_slam/cone_topic', 'cone_map')
-    pub = rospy.Publisher(topic_out, Float32MultiArray, queue_size = 100)
-    rospy.Subscriber(topic_in, Float32MultiArray, callBack)
+    #pub = rospy.Publisher(topic_out, slam_in, queue_size = 100)
+    rospy.Subscriber(topic_in, slam_in, callBack)
     rospy.spin()
 
 if __name__ == '__main__':

@@ -5,64 +5,40 @@ namespace ORB_SLAM2
 
 MapPublisher::MapPublisher(Map* pMap) : mpMap(pMap) {
 	n.param("/cone_slam/points_topic", topic_out, string("points_map"));
-	cone_map_pub = n.advertise<std_msgs::Float32MultiArray>(topic_out, 1000);
+	cone_map_pub = n.advertise<custom_msgs::slam_in>(topic_out, 1000);
 }
 
 void MapPublisher::PublishPoints(cv::Mat mOw)
 {
 	YELLOWpoints.clear();
 	BLUEpoints.clear();
-	std_msgs::Float32MultiArray m;
+	custom_msgs::slam_in msg;
 	MakeConeMap();
-	const unsigned int NYELLOW = YELLOWpoints.size();
-	const unsigned int NBLUE = BLUEpoints.size();
-	//cout << NYELLOW << " YELLOW cones, " << NBLUE << " blue cones.\n";
+	const int NYELLOW = YELLOWpoints.size();
+	const int NBLUE = BLUEpoints.size();
+	msg.NYELLOW = NYELLOW;
+	msg.NBLUE = NBLUE;
+	//TODO: what is mOw
+	msg.pos_x = mOw.at<float>(0,0);
+	msg.pos_y = mOw.at<float>(0,1);
 
-	// Consts
-	/*
-	create array msg:
-		mOw               , 0
-		NYELLOW, NBLUE,  0, 0
-		x1     , y1   , z1, color_enum
-		...
-		xi     , yi   , zo, color_enum
-		...
-	*/
-
-	const int mOwRows = mOw.rows; //should be 3
-	const int cols = 4;
-	const int rows = 2+NYELLOW+NBLUE; //first row-mOw, second row-amount of cones, all else is points
-	m.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	m.layout.dim[0].label = "height";
-	m.layout.dim[0].size = rows;
-	m.layout.dim[0].stride = cols*rows;
-	m.layout.dim.push_back(std_msgs::MultiArrayDimension());
-	m.layout.dim[1].label = "width";
-	m.layout.dim[1].size = cols; //for i>0: data[i,3] = cone type
-	m.layout.dim[1].stride = cols;
-	m.layout.data_offset = 0;
-
-	// mOw [3x1]
-	for (int i = 0; i < mOwRows; ++i)
-		m.data.push_back(mOw.at<float>(0,i));
-	m.data.push_back(static_cast<float>(0));
-
-	// amount of points
-	m.data.push_back(static_cast<float>(NYELLOW));
-	m.data.push_back(static_cast<float>(NBLUE));
-	m.data.push_back(static_cast<float>(0));
-	m.data.push_back(static_cast<float>(0));
+	msg.normal_x = 0;
+	msg.normal_y = 0;
 
 	// YELLOWpoints
 	for (int i = 0; i < NYELLOW; ++i)
-		for (int j = 0; j < cols; ++j)
-			m.data.push_back(YELLOWpoints[i][j]); //x,y,z
+	{
+		msg.yellow_x.push_back(YELLOWpoints[i][0]);
+		msg.yellow_y.push_back(YELLOWpoints[i][1]);
+	}
 
 	// BLUEpoints
-	for (int i = 0; i < NBLUE; ++i)
-		for (int j = 0; j < cols; ++j)
-			m.data.push_back(BLUEpoints[i][j]); //x,y,z
-	cone_map_pub.publish(m);
+	for (int i = 0; i < msg.NBLUE; ++i)
+	{
+		msg.blue_x.push_back(BLUEpoints[i][0]);
+		msg.blue_y.push_back(BLUEpoints[i][1]);
+	}
+	cone_map_pub.publish(msg);
 }
 
 void MapPublisher::MakeConeMap()
@@ -70,13 +46,6 @@ void MapPublisher::MakeConeMap()
 	vector<vector<float>> points = mpMap->GetAllConePoints(); //returns 4D vector (x,y,z, type)
 
 	//cout << "there are " << points.size() << " points\n";
-
-	// DEBUG cone_map
-	//vector<vector<float>> points = {}; //empty
-	//vector<vector<float>> points = {{1,1,1,0}, {1.1,1,1,0}, {1,1.1,1,0}}; //close yellow points with 1 center
-	//vector<vector<float>> points = {{1,1,1,1}, {1.1,1,1,1}, {1,1.1,1,1}, {2,2,2,1}, {2.1,2,2,1}, {2,2.1,2,1}}; //2 blue centers
-	//vector<vector<float>> points = {{-10,0,0,1}, {3,3,0,1}}; //distant points - only ouliers
-	//vector<vector<float>> points = {{1,1,1,1}, {1.1,1,1,1}, {1,1.1,1,1}, {2,2,2,1}, {2.1,2,2,1}, {2,2.1,2,1}, {100, 100, 1,1 }}; //2 blue centers + outlier?
 
 	//for all cone -> get vectors of YELLOW and BLUE
 	for(auto &i : points)

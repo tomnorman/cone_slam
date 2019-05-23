@@ -10,9 +10,7 @@
 
 #include <ros/ros.h>
 
-#include <std_msgs/MultiArrayDimension.h>
-#include <std_msgs/MultiArrayLayout.h>
-#include <std_msgs/Float32MultiArray.h>
+#include <custom_msgs/slam_in.h>
 
 #include <opencv2/core/core.hpp>
 
