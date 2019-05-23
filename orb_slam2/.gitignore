@@ -20,5 +20,7 @@ Thirdparty/g2o/lib/
 Vocabulary/ORBvoc.txt
 Thirdparty/DBoW2/build/
 Thirdparty/g2o/build/
+Thirdparty/darknet/lib/
+orb_slam2/lib/
 CMakeFiles/
 *~

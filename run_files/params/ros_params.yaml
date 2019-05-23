@@ -1,6 +1,6 @@
 cone_slam: {
 # orb_slam2:
-image_topic: "/camera/color/image_raw", #topic to get image
+image_topic: "/zed/zed_node/rgb_raw/image_raw_color", #topic to get image
 crop_scale: 1, #crop the image- 1:no crop
 dbscan_radius: 0.05,
 dbscan_ep: 3,
