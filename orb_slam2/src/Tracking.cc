@@ -359,7 +359,7 @@ void Tracking::Track()
                 }
 
                 // publish cones to the world
-                mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter());
+                mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter(), mCurrentFrame.GetRotationInverse());
             }
             else
             {

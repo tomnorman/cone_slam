@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import rospy
-from custom_msgs.msg import slam_in
+from custom_msgs.msg import slam_in, path_array
 from sklearn.cluster import DBSCAN
 import numpy as np
+from OrderConesDT import OrderCones
+
 
 def callBack(msg):
     # DBSCAN consts
@@ -26,8 +28,23 @@ def callBack(msg):
     blue_cones = np.array([])
     if NYELLOW:
         yellow_cones = create_centers(yellow_points, eps, min_samples)
+        YCONES = yellow_cones.shape(0)
+        yellow_cones = np.hstack((yellow_cones, np.full((YCONES, 1), yellow))) #x,y,color
     if NBLUE:
         blue_cones = create_centers(blue_points, eps, min_samples)
+        BCONES = blue_cones.shape(0)
+        blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), blue))) #x,y,color
+
+	mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose, normal)
+	out_msg = path_array()
+	out_msg.x = pose[0]
+	out_msg.y = pose[1]
+	out_msg.theta = np.arctan2(normal[1], normal[0])
+	out_msg.x_cones = mid_points[:,0]
+	out_msg.y_cones = mid_points[:,1]
+
+	pub.publish(out_msg)
+
 
 def create_centers(samples, eps, min_samples):
     clusters = DBSCAN(eps = eps, min_samples = min_samples).fit_predict(samples)
@@ -53,6 +70,7 @@ def create_centers(samples, eps, min_samples):
         centers += [np.mean(samples[clusters == i],axis = 0)] #get the mean of the cluster
         #TODO: geometric mean??
     return np.array(centers)
+
 
 def create_np_arr(msg):
     data = msg.data

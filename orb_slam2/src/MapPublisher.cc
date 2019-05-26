@@ -8,8 +8,9 @@ MapPublisher::MapPublisher(Map* pMap) : mpMap(pMap) {
 	cone_map_pub = n.advertise<custom_msgs::slam_in>(topic_out, 1000);
 }
 
-void MapPublisher::PublishPoints(cv::Mat mOw)
+void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 {
+
 	YELLOWpoints.clear();
 	BLUEpoints.clear();
 	custom_msgs::slam_in msg;
@@ -23,8 +24,13 @@ void MapPublisher::PublishPoints(cv::Mat mOw)
 	msg.pos_y = mOw.at<float>(0,1);
 	msg.pos_z = mOw.at<float>(0,2);
 
-	msg.normal_x = 0;
-	msg.normal_y = 0;
+	float forward_data[3] = {0,0,1}; // +z is forward
+	cv::Mat forward = cv::Mat(3, 1, CV_32F, forward_data);
+	cv::Mat normal = mRwc * forward;
+
+	msg.normal_x = normal.at<float>(0,0);
+	msg.normal_y = normal.at<float>(0,1);;
+	msg.normal_z = normal.at<float>(0,2);;
 
 	// YELLOWpoints
 	for (int i = 0; i < NYELLOW; ++i)

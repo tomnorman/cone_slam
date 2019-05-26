@@ -22,7 +22,7 @@ class MapPublisher
 public:
 	MapPublisher(Map* pMap);
 
-	void PublishPoints(cv::Mat mOw);
+	void PublishPoints(cv::Mat mOw, cv::Mat mRwc);
 
 private:
 	void MakeConeMap();
