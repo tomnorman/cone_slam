@@ -16,9 +16,7 @@ def callBack(msg):
     NBLUE = msg.NBLUE
 
     yellow_points = np.array([np.array(msg.yellow_x), np.array(msg.yellow_y)]).T
-    print yellow_points
     blue_points = np.array([np.array(msg.blue_x), np.array(msg.blue_y)]).T
-    print blue_points
 
     pose = np.array([msg.pos_x, msg.pos_y])
 
@@ -28,10 +26,8 @@ def callBack(msg):
     blue_cones = np.array([])
     if NYELLOW:
         yellow_cones = create_centers(yellow_points, eps, min_samples)
-        print yellow_cones.shape , 'yellow'
     if NBLUE:
         blue_cones = create_centers(blue_points, eps, min_samples)
-        print blue_cones.shape , 'blue'
 
 def create_centers(samples, eps, min_samples):
     clusters = DBSCAN(eps = eps, min_samples = min_samples).fit_predict(samples)
@@ -55,7 +51,6 @@ def create_centers(samples, eps, min_samples):
     centers = []
     for i in range(clusters[-1]+1): #clusters[-1] == np.max(clusters)
         centers += [np.mean(samples[clusters == i],axis = 0)] #get the mean of the cluster
-        print 'center', i, centers[i]
         #TODO: geometric mean??
     return np.array(centers)
 
@@ -81,6 +76,7 @@ def listener():
     topic_out = rospy.get_param('/cone_slam/cone_topic', 'cone_map')
     #pub = rospy.Publisher(topic_out, slam_in, queue_size = 100)
     rospy.Subscriber(topic_in, slam_in, callBack)
+
     rospy.spin()
 
 if __name__ == '__main__':

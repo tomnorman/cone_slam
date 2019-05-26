@@ -21,6 +21,7 @@ void MapPublisher::PublishPoints(cv::Mat mOw)
 	//TODO: what is mOw
 	msg.pos_x = mOw.at<float>(0,0);
 	msg.pos_y = mOw.at<float>(0,1);
+	msg.pos_z = mOw.at<float>(0,2);
 
 	msg.normal_x = 0;
 	msg.normal_y = 0;
