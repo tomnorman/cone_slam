@@ -35,15 +35,15 @@ def callBack(msg):
         BCONES = blue_cones.shape(0)
         blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), blue))) #x,y,color
 
-	mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose, normal)
-	out_msg = path_array()
-	out_msg.x = pose[0]
-	out_msg.y = pose[1]
-	out_msg.theta = np.arctan2(normal[1], normal[0])
-	out_msg.x_cones = mid_points[:,0]
-	out_msg.y_cones = mid_points[:,1]
+    mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose, normal)
+    out_msg = path_array()
+    out_msg.x = pose[0]
+    out_msg.y = pose[1]
+    out_msg.theta = np.arctan2(normal[1], normal[0])
+    out_msg.x_cones = mid_points[:,0]
+    out_msg.y_cones = mid_points[:,1]
 
-	pub.publish(out_msg)
+    pub.publish(out_msg)
 
 
 def create_centers(samples, eps, min_samples):
