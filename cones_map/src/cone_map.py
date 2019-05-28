@@ -34,14 +34,30 @@ def callBack(msg):
         blue_cones = create_centers(blue_points, eps, min_samples)
         BCONES = blue_cones.shape(0)
         blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), blue))) #x,y,color
+        
+    test_msg = slam_in()
+    test_msg.pos_x = pose[0]
+    test_msg.pos_y = pose[1]
+    test_msg.pos_z = 0
+    test_msg.normal_x = normal[0]
+    test_msg.normal_y = normal[1]
+    test_msg.normal_z = 0
+    test_msg.NYELLOW = NYELLOW
+    test_msg.NBLUE = NBLUE
+    test_msg.yellow_x = yellow_cones[:,0].tolist()
+    test_msg.yellow_y = yellow_cones[:,1].tolist()
+    test_msg.blue_x = blue_cones[:,0].tolist()
+    test_msg.blue_y = blue_cones[:,1].tolist()
+    test_pub.publish(test_msg)
+    
     out_msg = path_array()
     if NBLUE || NYELLOW:
         mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose, normal)
         out_msg.x = pose[0]
         out_msg.y = pose[1]
         out_msg.theta = np.arctan2(normal[1], normal[0])
-        out_msg.x_cones = mid_points[:,0]
-        out_msg.y_cones = mid_points[:,1]
+        out_msg.x_cones = mid_points[:,0].tolist()
+        out_msg.y_cones = mid_points[:,1].tolist()
 
     pub.publish(out_msg)
 
@@ -88,12 +104,17 @@ def create_np_arr(msg):
     return np.array(arr)
 
 def listener():
-    global pub
+    global pub, test_pub
     rospy.init_node('listener', anonymous = True)
+    # get points cluster from orbslam
     topic_in = rospy.get_param('/orb_slam2/points_topic', 'points_map')
+    rospy.Subscriber(topic_in, slam_in, callBack)
+    # topic to send output of Alon
     topic_out = 'cones_map'
     pub = rospy.Publisher(topic_out, slam_in, queue_size = 100)
-    rospy.Subscriber(topic_in, slam_in, callBack)
+    # topic to send to plotter
+    topic_test_out = 'slam_test'
+    test_pub = rospy.Publisher(topic_test_out, slam_in, queue_size = 100)
 
     rospy.spin()
 
