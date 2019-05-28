@@ -11,6 +11,7 @@ MapPublisher::MapPublisher(Map* pMap) : mpMap(pMap) {
 void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 {
 	if(mOw.empty() || mRwc.empty()) return;
+	cout << mRwc << endl << mOw << endl;
 	YELLOWpoints.clear();
 	BLUEpoints.clear();
 	custom_msgs::slam_in msg;
@@ -23,13 +24,9 @@ void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 	msg.pos_y = mOw.at<float>(0,1);
 	msg.pos_z = mOw.at<float>(0,2);
 
-	float forward_data[3] = {0,0,1}; // +z is forward
-	cv::Mat forward = cv::Mat(3, 1, CV_32F, forward_data);
-	cv::Mat normal = mRwc * forward;
-
-	msg.normal_x = normal.at<float>(0,0);
-	msg.normal_y = normal.at<float>(0,1);;
-	msg.normal_z = normal.at<float>(0,2);;
+	msg.normal_x = -mRwc.at<float>(0,2);
+	msg.normal_y = -mRwc.at<float>(2,2);;
+	msg.normal_z = -mRwc.at<float>(1,2);
 
 	// YELLOWpoints
 	for (int i = 0; i < NYELLOW; ++i)

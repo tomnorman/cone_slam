@@ -1,0 +1,4 @@
+cones_map: {
+cones_topic: "cones_map",
+test_topic: "slam_test"
+}
