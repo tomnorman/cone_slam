@@ -5,7 +5,7 @@ namespace ORB_SLAM2
 
 MapPublisher::MapPublisher(Map* pMap) : mpMap(pMap) {
 	n.param("/orb_slam2/points_topic", topic_out, string("points_map"));
-	cone_map_pub = n.advertise<custom_msgs::slam_in>(topic_out, 1000);
+	cones_map_pub = n.advertise<custom_msgs::slam_in>(topic_out, 1000);
 }
 
 void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
@@ -19,7 +19,6 @@ void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 	const int NBLUE = BLUEpoints.size();
 	msg.NYELLOW = NYELLOW;
 	msg.NBLUE = NBLUE;
-	//TODO: what is mOw
 	msg.pos_x = mOw.at<float>(0,0);
 	msg.pos_y = mOw.at<float>(0,1);
 	msg.pos_z = mOw.at<float>(0,2);
@@ -45,7 +44,7 @@ void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 		msg.blue_x.push_back(BLUEpoints[i][0]);
 		msg.blue_y.push_back(BLUEpoints[i][1]);
 	}
-	cone_map_pub.publish(msg);
+	cones_map_pub.publish(msg);
 }
 
 void MapPublisher::MakeConeMap()

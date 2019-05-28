@@ -1,0 +1,5 @@
+<launch>
+
+	<node pkg="slam_test" type="xyplot.py" name="slam_test" output="screen"/>
+
+</launch>

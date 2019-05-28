@@ -91,8 +91,8 @@ def listener():
     global pub
     rospy.init_node('listener', anonymous = True)
     topic_in = rospy.get_param('/orb_slam2/points_topic', 'points_map')
-    topic_out = 'cone_map'
-    #pub = rospy.Publisher(topic_out, slam_in, queue_size = 100)
+    topic_out = 'cones_map'
+    pub = rospy.Publisher(topic_out, slam_in, queue_size = 100)
     rospy.Subscriber(topic_in, slam_in, callBack)
 
     rospy.spin()

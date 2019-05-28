@@ -1,5 +1,0 @@
-<launch>
-
-	<node pkg="cone_map" type="cone_map.py" name="cone_map" output="screen"/>
-
-</launch>

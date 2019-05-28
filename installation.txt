@@ -41,10 +41,11 @@ exit
 
 
 RUN:
-roslaunch orb_slam2 slam.launch
-roslaunch cone_map map.launch
 roslaunch realsense2_camera rs_camera.launch # realsense
 roslaunch zed_wrapper zed.launch # zed
+roslaunch orb_slam2 slam.launch
+roslaunch cones_map map.launch
+roslaunch slam_test test.launch
 
 g2o crashing solution:
 https://github.com/cehberlin/ORB_SLAM/pull/2

@@ -32,7 +32,7 @@ private:
 	// ROS
 	string topic_out;
 	ros::NodeHandle n;
-	ros::Publisher cone_map_pub;
+	ros::Publisher cones_map_pub;
 };
 
 } //namespace ORB_SLAM
