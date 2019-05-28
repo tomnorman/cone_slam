@@ -34,7 +34,7 @@ if __name__ == '__main__':
     counter = 0
     flag = 0
     rospy.init_node("plotter")
-    topic_in = rospy.get_param('/orb_slam2/points_topic', 'points_map')
+    topic_in = 'slam_test'
     rospy.Subscriber(topic_in, slam_in , plot_points)
     plt.ion()
     plt.show()
