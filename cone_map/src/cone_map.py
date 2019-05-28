@@ -34,14 +34,14 @@ def callBack(msg):
         blue_cones = create_centers(blue_points, eps, min_samples)
         BCONES = blue_cones.shape(0)
         blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), blue))) #x,y,color
-
-    mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose, normal)
     out_msg = path_array()
-    out_msg.x = pose[0]
-    out_msg.y = pose[1]
-    out_msg.theta = np.arctan2(normal[1], normal[0])
-    out_msg.x_cones = mid_points[:,0]
-    out_msg.y_cones = mid_points[:,1]
+    if NBLUE || NYELLOW:
+        mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose, normal)
+        out_msg.x = pose[0]
+        out_msg.y = pose[1]
+        out_msg.theta = np.arctan2(normal[1], normal[0])
+        out_msg.x_cones = mid_points[:,0]
+        out_msg.y_cones = mid_points[:,1]
 
     pub.publish(out_msg)
 
@@ -90,8 +90,8 @@ def create_np_arr(msg):
 def listener():
     global pub
     rospy.init_node('listener', anonymous = True)
-    topic_in = rospy.get_param('/cone_slam/points_topic', 'points_map')
-    topic_out = rospy.get_param('/cone_slam/cone_topic', 'cone_map')
+    topic_in = rospy.get_param('/orb_slam2/points_topic', 'points_map')
+    topic_out = 'cone_map'
     #pub = rospy.Publisher(topic_out, slam_in, queue_size = 100)
     rospy.Subscriber(topic_in, slam_in, callBack)
 
