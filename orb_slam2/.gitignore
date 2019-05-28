@@ -21,6 +21,6 @@ Vocabulary/ORBvoc.txt
 Thirdparty/DBoW2/build/
 Thirdparty/g2o/build/
 Thirdparty/darknet/lib/
-lib/
+lib/*
 CMakeFiles/
 *~
