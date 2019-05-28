@@ -67,9 +67,8 @@ int main(int argc, char **argv)
 
     // ROS parameters
     ros::NodeHandle nodeHandler;
-    nodeHandler.param("/cone_slam/crop_scale", crop, double(1));
-    nodeHandler.param("/cone_slam/image_topic", image_topic, string("/camera/image_raw"));
-    nodeHandler.param("/cone_slam/RAW", RAW, 0);
+    nodeHandler.param("/orb_slam2/image_topic", image_topic, string("/camera/image_raw"));
+    nodeHandler.param("/orb_slam2/RAW", RAW, 0);
     ros::Subscriber sub;
     if(RAW)
         sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImageRaw, &igb);
@@ -91,7 +90,6 @@ int main(int argc, char **argv)
 void ImageGrabber::GrabImage(const sensor_msgs::CompressedImageConstPtr& msg)
 {
     cv::Mat image_mat = cv::imdecode(cv::Mat(msg->data),1);
-    // image_mat = image_mat(cv::Range(int(rows/crop), rows-1), cv::Range(0, cols-1));
 
     // Pass the image to the SLAM system
     mpSLAM->TrackMonocular(image_mat,msg->header.stamp.toSec());

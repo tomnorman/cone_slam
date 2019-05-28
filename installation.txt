@@ -32,6 +32,7 @@ cd formuls_ws
 mkdir src
 cd src
 git clone https://github.com/tomnorman/cone_slam.git
+git clone https://github.com/yardenshap/custom_msgs.git
 cd orb_slam2
 ./build.sh
 catkin build
@@ -40,9 +41,10 @@ exit
 
 
 RUN:
-roslaunch run_files slam.launch
-roslaunch run_files map.launch
-roslaunch realsense2_camera rs_camera.launch
+roslaunch orb_slam2 slam.launch
+roslaunch cone_map map.launch
+roslaunch realsense2_camera rs_camera.launch # realsense
+roslaunch zed_wrapper zed.launch # zed
 
 g2o crashing solution:
 https://github.com/cehberlin/ORB_SLAM/pull/2

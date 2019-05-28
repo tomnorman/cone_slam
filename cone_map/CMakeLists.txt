@@ -9,6 +9,7 @@ project(cone_map)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   std_msgs
+  custom_msgs
   rospy
 )
 

@@ -50,7 +50,7 @@ def create_centers(samples, eps, min_samples):
     clusters = DBSCAN(eps = eps, min_samples = min_samples).fit_predict(samples)
     sorted_clusters_idxs = np.argsort(clusters)
     clusters = clusters[sorted_clusters_idxs]
-    samples = samples[sorted_clusters_idxs] #clusteyellow smaples
+    samples = samples[sorted_clusters_idxs] #cluster samples
     '''
     cone -1 #-1 is ouliers
     cone -1 #-1 is ouliers

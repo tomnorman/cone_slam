@@ -4,13 +4,13 @@ namespace ORB_SLAM2
 {
 
 MapPublisher::MapPublisher(Map* pMap) : mpMap(pMap) {
-	n.param("/cone_slam/points_topic", topic_out, string("points_map"));
+	n.param("/orb_slam2/points_topic", topic_out, string("points_map"));
 	cone_map_pub = n.advertise<custom_msgs::slam_in>(topic_out, 1000);
 }
 
 void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 {
-
+	if(mOw.empty() || mRwc.empty()) return;
 	YELLOWpoints.clear();
 	BLUEpoints.clear();
 	custom_msgs::slam_in msg;
