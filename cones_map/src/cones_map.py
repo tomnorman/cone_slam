@@ -20,9 +20,9 @@ def callBack(msg):
     yellow_points = np.array([np.array(msg.yellow_x), np.array(msg.yellow_y)]).T
     blue_points = np.array([np.array(msg.blue_x), np.array(msg.blue_y)]).T
 
-    pose = np.array([msg.pos_x, msg.pos_y])
+    pose = np.array([msg.pos_x, msg.pos_y, msg.pos_z])
 
-    normal = np.array([msg.normal_x, msg.normal_y])
+    normal = np.array([msg.normal_x, msg.normal_y, msg.normal_z])
 
     yellow_cones = np.array([])
     blue_cones = np.array([])
@@ -43,10 +43,10 @@ def callBack(msg):
     test_msg = slam_in()
     test_msg.pos_x = pose[0]
     test_msg.pos_y = pose[1]
-    test_msg.pos_z = 0
+    test_msg.pos_z = pose[2]
     test_msg.normal_x = normal[0]
     test_msg.normal_y = normal[1]
-    test_msg.normal_z = 0
+    test_msg.normal_z = normal[2]
     test_msg.NYELLOW = YCONES
     test_msg.NBLUE = BCONES
     if YCONES:

@@ -102,7 +102,6 @@ vector<vector<float>> Map::GetAllConePoints()
     vector<vector<float>> points;
     for(auto &i : mspConePoints) // i is *pMap
     {
-        cout << "got points\n";
         // cone type
         float mnConeType = static_cast<float>(i->mnConeType);
         // postion in world

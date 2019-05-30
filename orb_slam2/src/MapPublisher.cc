@@ -11,7 +11,9 @@ MapPublisher::MapPublisher(Map* pMap) : mpMap(pMap) {
 void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 {
 	if(mOw.empty() || mRwc.empty()) return;
-	cout << mRwc << endl << mOw << endl;
+	cout << "camera to world"<< endl<<mRwc << endl <<"world to camera"<<endl<< mRwc.t() << endl;
+
+	cout << "pos" << endl << mOw<< endl << endl;
 	YELLOWpoints.clear();
 	BLUEpoints.clear();
 	custom_msgs::slam_in msg;
@@ -24,22 +26,22 @@ void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 	msg.pos_y = mOw.at<float>(0,1);
 	msg.pos_z = mOw.at<float>(0,2);
 
-	msg.normal_x = -mRwc.at<float>(0,2);
-	msg.normal_y = -mRwc.at<float>(2,2);;
-	msg.normal_z = -mRwc.at<float>(1,2);
+	msg.normal_x = mRwc.at<float>(0,2);
+	msg.normal_y = mRwc.at<float>(1,2);;
+	msg.normal_z = mRwc.at<float>(2,2);
 
 	// YELLOWpoints
 	for (int i = 0; i < NYELLOW; ++i)
 	{
 		msg.yellow_x.push_back(YELLOWpoints[i][0]);
-		msg.yellow_y.push_back(YELLOWpoints[i][1]);
+		msg.yellow_y.push_back(YELLOWpoints[i][2]);
 	}
 
 	// BLUEpoints
 	for (int i = 0; i < msg.NBLUE; ++i)
 	{
 		msg.blue_x.push_back(BLUEpoints[i][0]);
-		msg.blue_y.push_back(BLUEpoints[i][1]);
+		msg.blue_y.push_back(BLUEpoints[i][2]);
 	}
 	cones_map_pub.publish(msg);
 }
@@ -53,7 +55,6 @@ void MapPublisher::MakeConeMap()
 	//for all cone -> get vectors of YELLOW and BLUE
 	for(auto &i : points)
 	{
-		cout <<static_cast<int>(i.back()) << " point type\n";
 		if (static_cast<int>(i.back()) == YELLOWC)
 			YELLOWpoints.push_back(i);
 		else if(static_cast<int>(i.back()) == BLUEC)
