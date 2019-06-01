@@ -1,4 +1,4 @@
 cones_map: {
-cones_topic: "cones_map",
+cones_topic: "carPoseForPurePursuit",
 test_topic: "slam_test"
 }

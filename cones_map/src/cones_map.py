@@ -64,16 +64,17 @@ def callBack(msg):
 
     test_pub.publish(test_msg)
     
-    #out_msg = path_array()
-    #if NBLUE or NYELLOW:
-        #mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose, normal)
-        #out_msg.x = pose[0]
-        #out_msg.y = pose[1]
-        #out_msg.theta = np.arctan2(normal[1], normal[0])
-        #out_msg.x_cones = mid_points[:,0].tolist()
-        #out_msg.y_cones = mid_points[:,1].tolist()
-
-    #pub.publish(out_msg)
+    out_msg = path_array()
+    if NBLUE or NYELLOW:
+        alon_pose = np.array(pose[0], pose[2])
+        alon_normal = np.array(normal[0], normal[2])
+        mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), alon_pose, alon_normal)
+        out_msg.x = pose[0]
+        out_msg.y = pose[2]
+        out_msg.theta = np.arctan2(normal[2], normal[0])
+        out_msg.x_cones = mid_points[:,0].tolist()
+        out_msg.y_cones = mid_points[:,1].tolist()
+        pub.publish(out_msg)
 
 
 def create_centers(samples, eps, min_samples):
@@ -108,7 +109,7 @@ def listener():
     topic_in = rospy.get_param('/orb_slam2/points_topic', 'points_map')
     rospy.Subscriber(topic_in, slam_in, callBack)
     # topic to send output of Alon
-    topic_out = rospy.get_param('/cones_map/cones_topic', 'cones_map')
+    topic_out = rospy.get_param('/cones_map/cones_topic', 'carPoseForPurePursuit')
     pub = rospy.Publisher(topic_out, path_array, queue_size = 100)
     # topic to send to plotter
     topic_test_out = rospy.get_param('/cones_map/test_topic', 'slam_test')
