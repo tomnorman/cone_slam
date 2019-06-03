@@ -8,7 +8,7 @@ from OrderConesDT import OrderCones
 
 def callBack(msg):
     # DBSCAN consts
-    eps = 0.02
+    eps = 0.05
     min_samples = 3
 
     yellow = 121 #number to identify cone
@@ -20,9 +20,9 @@ def callBack(msg):
     yellow_points = np.array([np.array(msg.yellow_x), np.array(msg.yellow_y)]).T
     blue_points = np.array([np.array(msg.blue_x), np.array(msg.blue_y)]).T
 
-    pose = np.array([msg.pos_x, msg.pos_y, msg.pos_z])
+    pose2D = np.array([msg.pos_x, msg.pos_z])
 
-    normal = np.array([msg.normal_x, msg.normal_y, msg.normal_z])
+    normal2D = np.array([msg.normal_x, msg.normal_z])
 
     yellow_cones = np.array([])
     blue_cones = np.array([])
@@ -41,12 +41,10 @@ def callBack(msg):
             blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), blue))) #x,y,color
         
     test_msg = slam_in()
-    test_msg.pos_x = pose[0]
-    test_msg.pos_y = pose[1]
-    test_msg.pos_z = pose[2]
-    test_msg.normal_x = normal[0]
-    test_msg.normal_y = normal[1]
-    test_msg.normal_z = normal[2]
+    test_msg.pos_x = pose2D[0]
+    test_msg.pos_y = pose2D[1]
+    test_msg.normal_x = normal2D[0]
+    test_msg.normal_y = normal2D[1]
     test_msg.NYELLOW = YCONES
     test_msg.NBLUE = BCONES
     if YCONES:
@@ -62,16 +60,25 @@ def callBack(msg):
         test_msg.blue_x = [0]
         test_msg.blue_y = [0]
 
-    test_pub.publish(test_msg)
+    #test_pub.publish(test_msg)
     
+
     out_msg = path_array()
-    if NBLUE or NYELLOW:
-        alon_pose = np.array(pose[0], pose[2])
-        alon_normal = np.array(normal[0], normal[2])
-        mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), alon_pose, alon_normal)
-        out_msg.x = pose[0]
-        out_msg.y = pose[2]
-        out_msg.theta = np.arctan2(normal[2], normal[0])
+    print yellow_cones.shape[0], blue_cones.shape[0]
+    if yellow_cones.shape[0] > 1 and blue_cones.shape[0] > 1:
+        mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose2D, normal2D, CostThreshold=-1,RRatioThreshold=10000,SphereR=25000,CarLength=0.05)
+        if not mid_points.shape[0]: 
+            print 'no mid_points'
+            return
+
+        test_msg.mid_points_x = mid_points[:,0].tolist()
+        test_msg.mid_points_y = mid_points[:,1].tolist()
+        test_msg.theta = np.arctan2(normal2D[1], normal2D[0])
+        test_pub.publish(test_msg)
+        
+        out_msg.x = pose2D[0]
+        out_msg.y = pose2D[1]
+        out_msg.theta = np.arctan2(normal2D[1], normal2D[0])
         out_msg.x_cones = mid_points[:,0].tolist()
         out_msg.y_cones = mid_points[:,1].tolist()
         pub.publish(out_msg)

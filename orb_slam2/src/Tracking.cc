@@ -265,11 +265,6 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 {
     mImGray = im;
 
-    // cones_map debug
-    //float dummy_query_data[3] = {0};
-    //cv::Mat dummy_query = cv::Mat(3, 1, CV_32F, dummy_query_data);
-    //mpPublish->PublishPoints(dummy_query);
-
     cv::Mat detectImage; // rgb image if needed
     if(mImGray.channels()==3)
     {
@@ -299,9 +294,9 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
     }
 
     if(mState==NOT_INITIALIZED || mState==NO_IMAGES_YET)
-        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh);
+        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh,detectImage);
     else
-        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh);
+        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh,detectImage);
     Track();
 
     return mCurrentFrame.mTcw.clone();
@@ -733,7 +728,8 @@ void Tracking::CreateInitialMapMonocular()
 
     // Set median depth to 1
     float medianDepth = pKFini->ComputeSceneMedianDepth(2);
-    float invMedianDepth = 1.0f/medianDepth;
+    //float invMedianDepth = 1.0f/medianDepth;
+	float invMedianDepth = 0.04;
 
     if(medianDepth<0 || pKFcur->TrackedMapPoints(1)<100)
     {

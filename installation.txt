@@ -47,5 +47,6 @@ roslaunch orb_slam2 slam.launch
 roslaunch cones_map map.launch
 roslaunch slam_test test.launch
 
+
 g2o crashing solution:
 https://github.com/cehberlin/ORB_SLAM/pull/2

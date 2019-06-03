@@ -183,7 +183,7 @@ def EdgeCost(InCenter,EdgeCones,u):
             J=J+1
         else: #not the same color
             J=J-1
-        J=J-np.dot(u,OutFacingNormal(EdgeCones[:,:2],InCenter)) #+bad points for difference in direction
+        J=0.5*J-np.dot(u,OutFacingNormal(EdgeCones[:,:2],InCenter)) #+bad points for difference in direction
         return J
 
 def TriOne(DT,ConesColors,ID,CarDir):
@@ -256,6 +256,9 @@ def FindNextTriangle(DT,ConesColors,ID,Dir,CrossEdge):
     Attachments=np.where(np.any(DT.simplices==NewCrossEdge[0],axis=1) &\
                          np.any(DT.simplices==NewCrossEdge[1],axis=1)) #find IDs that are connected to edge
     NewID=np.squeeze(np.setdiff1d(Attachments,ID)) #NewID - New Triangle
+    if NewID.size==0:
+        RRatio=0; #filler
+        return NewID,NewDir,NewCrossEdge,MinCost,RRatio
     
     NewV=DT.simplices[NewID,:] #find vertex indcies of NewID (=NewTriangle)
 #    NewV=NewV.reshape(3)
@@ -274,19 +277,19 @@ def FindMiddle(OBCones,OYCones):
 
     #decide on inner and outer cones by amount (infantile)
     Bamnt=OBCones.shape[0]; Yamnt=OYCones.shape[0] 
-    Mamnt=np.minimum(Bamnt,Yamnt) #amount of middle points - as inner track cones
-    Ind=np.argmin([Bamnt,Yamnt]) #index of minimum between [Bamnt,Yamnt]
+    Mamnt=np.maximum(Bamnt,Yamnt) #amount of middle points - as outer track cones
+    Ind=np.argmax([Bamnt,Yamnt]) #index of maximum between [Bamnt,Yamnt]
     if Ind==0:
-        Inxy=OBCones; Outxy=OYCones
+        Outxy=OBCones; Inxy=OYCones
     else:
-        Inxy=OYCones; Outxy=OBCones
+        Outxy=OYCones; Inxy=OBCones
     
     #Build the middle points    
     OMxy=np.zeros([Mamnt,2])    
     for k in range(0,Mamnt):
-        InCone=Inxy[k,:]
-        Ind=np.argmin(np.diag(np.matmul(Outxy-InCone,np.transpose(Outxy-InCone)))) #find closest OutCone to k-th InCone
-        OutCone=Outxy[Ind,:]
+        OutCone=Outxy[k,:]
+        Ind=np.argmin(np.diag(np.matmul(Inxy-OutCone,np.transpose(Inxy-OutCone)))) #find closest OutCone to k-th OutCone
+        InCone=Inxy[Ind,:]
         OMxy[k,:]=(InCone+OutCone)/2
         
     return OMxy
@@ -340,10 +343,11 @@ def OrderCones(Cones,CarCG,CarVel,MaxItrAmnt=50,CostThreshold=-0.2,\
     if (ID==-1): #if CarCG isoutside of convex hull
         Cones=np.vstack([Cones,np.hstack([CarCG,0])]) #add Car to Cones as a fake cone
         DT=Delaunay(Cones[:,:2])#Triangulate /w Cones+CarCG
-        ID=DT.find_simplex(DT,CarCG+0.5*CarLength*CarDir) #find first triangle to work with  
-    
-    NewID,Newu,NewCrossEdge=TriOne(DT,Cones[:,2],ID,CarDir)
-    if NewID==-1: return #crossed into no-man's land
+        ID=DT.find_simplex(CarCG+0.5*CarLength*CarDir) #find first triangle to work with
+    if ID==-1: return #no cones in sight. couldnt build a track
+
+    NewID,Newu,NewCrossEdge=TriOne(DT,Cones[:,2],ID,CarDir) #not sure if this is needed
+    if NewID.size==0: return #crossed into no-man's land
     
     #insert first cones into lists (Bind/Yind)
     if Cones[NewCrossEdge[0],2]==ord('y'): 
@@ -364,7 +368,7 @@ def OrderCones(Cones,CarCG,CarVel,MaxItrAmnt=50,CostThreshold=-0.2,\
         #find next triangle
         NewID,Newu,NewCrossEdge,Cost,RRatio=FindNextTriangle(DT,Cones[:,2],NewID,Newu,NewCrossEdge)
         #check conditions, if not good enough - break
-        if NewID==-1 or CostThreshold<Cost or RRatioThreshold<RRatio:
+        if NewID.size==0 or CostThreshold<Cost or RRatioThreshold<RRatio:
             break
         #add next cone to Bind/Yind
         NewV=np.setdiff1d(DT.simplices[NewID,:],NewCrossEdge)

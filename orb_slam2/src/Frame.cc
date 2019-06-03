@@ -179,7 +179,7 @@ Frame::Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeSt
 
 
 Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extractor, ORBVocabulary* voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth,
-             Detector* detector, const double thresh)
+             Detector* detector, const double thresh, cv::Mat &detectImage)
     :mpORBvocabulary(voc),mpORBextractorLeft(extractor),mpORBextractorRight(static_cast<ORBextractor*>(NULL)),
      mTimeStamp(timeStamp), mK(K.clone()),mDistCoef(distCoef.clone()), mbf(bf), mThDepth(thDepth)
 {
@@ -199,17 +199,8 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     ExtractORB(0,imGray);
 
     // detect cones
-    auto cur_frame = imGray.clone();
+    auto cur_frame = detectImage.clone();
     mvCones = detector->detect(cur_frame, thresh, false);
-    // if(mvCones.size())
-    // {
-    //     cout << "x " << mvCones[0].x << " w "<< mvCones[0].w << " y " << mvCones[0].y << " h "<< mvCones[0].h<<endl;
-    //     int x = mvCones[0].x;
-    //     int w = mvCones[0].w;
-    //     int y = mvCones[0].y;
-    //     int h = mvCones[0].h;
-    //     ExtractORB(1,imGray(cv::Range(x, x+w),cv::Range(y, y+h)));
-    // }
 
     N = mvKeys.size();
     mvKeysCones.assign(N, -1);

@@ -11,9 +11,8 @@ MapPublisher::MapPublisher(Map* pMap) : mpMap(pMap) {
 void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 {
 	if(mOw.empty() || mRwc.empty()) return;
-	cout << "camera to world"<< endl<<mRwc << endl <<"world to camera"<<endl<< mRwc.t() << endl;
 
-	cout << "pos" << endl << mOw<< endl << endl;
+	/* z is forward, y upwards */	
 	YELLOWpoints.clear();
 	BLUEpoints.clear();
 	custom_msgs::slam_in msg;
@@ -49,8 +48,6 @@ void MapPublisher::PublishPoints(cv::Mat mOw, cv::Mat mRwc)
 void MapPublisher::MakeConeMap()
 {
 	vector<vector<float>> points = mpMap->GetAllConePoints(); //returns 4D vector (x,y,z, type)
-
-	//cout << "there are " << points.size() << " points\n";
 
 	//for all cone -> get vectors of YELLOW and BLUE
 	for(auto &i : points)

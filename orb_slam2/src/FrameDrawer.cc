@@ -130,13 +130,13 @@ cv::Mat FrameDrawer::DrawFrame()
                 {
                     //if (vCones[i] == YELLOWC)
                     //{
-                        // cones
+                        //// cones
                         //cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,255));
                         //cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(0,255,255),-1);
                     //}
                     //else if (vCones[i] == BLUEC)
                     //{
-                        // cones
+                        //// cones
                         //cv::rectangle(im,pt1,pt2,cv::Scalar(255,0,0));
                         //cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(255,0,0),-1);
                     //}
