@@ -67,7 +67,7 @@ def callBack(msg):
     print yellow_cones.shape[0], blue_cones.shape[0]
     if yellow_cones.shape[0] > 1 and blue_cones.shape[0] > 1:
         mid_points = OrderCones(np.vstack((yellow_cones, blue_cones)), pose2D, normal2D, CostThreshold=-1,RRatioThreshold=10000,SphereR=25000,CarLength=0.05)
-        if not mid_points.shape[0]: 
+        if mid_points.shape[0] == 0: 
             print 'no mid_points'
             return
 
