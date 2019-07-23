@@ -36,6 +36,7 @@ Frame::Frame()
 {}
 
 //Copy Constructor
+/*cones*/
 Frame::Frame(const Frame &frame)
     :mpORBvocabulary(frame.mpORBvocabulary), mpORBextractorLeft(frame.mpORBextractorLeft), mpORBextractorRight(frame.mpORBextractorRight),
      mTimeStamp(frame.mTimeStamp), mK(frame.mK.clone()), mDistCoef(frame.mDistCoef.clone()),
@@ -49,14 +50,11 @@ Frame::Frame(const Frame &frame)
      mvScaleFactors(frame.mvScaleFactors), mvInvScaleFactors(frame.mvInvScaleFactors),
      mvLevelSigma2(frame.mvLevelSigma2), mvInvLevelSigma2(frame.mvInvLevelSigma2),
      mvKeysCones(frame.mvKeysCones)
+/**/
 {
     for(int i=0;i<FRAME_GRID_COLS;i++)
-    {
         for(int j=0; j<FRAME_GRID_ROWS; j++)
-        {
             mGrid[i][j]=frame.mGrid[i][j];
-        }
-    }
 
     if(!frame.mTcw.empty())
         SetPose(frame.mTcw);
@@ -86,7 +84,10 @@ Frame::Frame(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timeSt
     threadRight.join();
 
     N = mvKeys.size();
+    /*cones*/
+    //preallocate space
     mvKeysCones.assign(N, -1);
+    /**/
 
     if(mvKeys.empty())
         return;
@@ -142,7 +143,10 @@ Frame::Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeSt
     ExtractORB(0,imGray);
 
     N = mvKeys.size();
+    /*cones*/
+    //preallocate space
     mvKeysCones.assign(N, -1);
+    /**/
 
     if(mvKeys.empty())
         return;
@@ -177,9 +181,10 @@ Frame::Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeSt
     AssignFeaturesToGrid();
 }
 
-
+/*cones*/
 Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extractor, ORBVocabulary* voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth,
              Detector* detector, const double thresh, cv::Mat &detectImage)
+/**/
     :mpORBvocabulary(voc),mpORBextractorLeft(extractor),mpORBextractorRight(static_cast<ORBextractor*>(NULL)),
      mTimeStamp(timeStamp), mK(K.clone()),mDistCoef(distCoef.clone()), mbf(bf), mThDepth(thDepth)
 {
@@ -198,13 +203,14 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     // ORB extraction
     ExtractORB(0,imGray);
 
-    // detect cones
+    /*cones*/
+    //detect cones
     auto cur_frame = detectImage.clone();
     mvCones = detector->detect(cur_frame, thresh, false);
 
     N = mvKeys.size();
     mvKeysCones.assign(N, -1);
-
+    /**/
     if(mvKeys.empty())
         return;
 
@@ -238,9 +244,16 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     mb = mbf/fx;
 
     AssignFeaturesToGrid();
+    /*cones*/
+    //assign keypoints to corresponding yolo boxes
     AssignKPToYOLO();
+    /**/
 }
-
+/*cones*/
+//foreach bounding box yolo supplied:
+//  get all Cells (orbslam made those cells) it contains
+//  if there are keypoints in them:
+//      add them to cone list (mvKeysCones)
 void Frame::AssignKPToYOLO()
 {
     for (auto box : mvCones)
@@ -280,6 +293,7 @@ void Frame::AssignKPToYOLO()
         }
     }
 }
+/**/
 
 void Frame::AssignFeaturesToGrid()
 {
@@ -301,11 +315,9 @@ void Frame::AssignFeaturesToGrid()
 void Frame::ExtractORB(int flag, const cv::Mat &im)
 {
     if(flag==0)
-        (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors, flag);
-    else if(flag==1)
-        (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors, flag);
+        (*mpORBextractorLeft)(im,cv::Mat(),mvKeys,mDescriptors);
     else
-        (*mpORBextractorRight)(im,cv::Mat(),mvKeysRight,mDescriptorsRight, flag);
+        (*mpORBextractorRight)(im,cv::Mat(),mvKeysRight,mDescriptorsRight);
 }
 
 void Frame::SetPose(cv::Mat Tcw)
@@ -447,6 +459,8 @@ bool Frame::PosInGrid(const cv::KeyPoint &kp, int &posX, int &posY)
     return true;
 }
 
+/*cones*/
+//overloading
 bool Frame::PosInGrid(double x, double y, int &posX, int &posY)
 {
     posX = round((x-mnMinX)*mfGridElementWidthInv);
@@ -458,7 +472,7 @@ bool Frame::PosInGrid(double x, double y, int &posX, int &posY)
 
     return true;
 }
-
+/**/
 
 void Frame::ComputeBoW()
 {

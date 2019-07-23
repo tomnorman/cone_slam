@@ -22,9 +22,9 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include <string>
-#include <thread>
-#include <opencv2/core/core.hpp>
+#include<string>
+#include<thread>
+#include<opencv2/core/core.hpp>
 
 #include "Tracking.h"
 #include "FrameDrawer.h"
@@ -35,7 +35,9 @@
 #include "KeyFrameDatabase.h"
 #include "ORBVocabulary.h"
 #include "Viewer.h"
+/*cones*/
 #include "MapPublisher.h"
+/**/
 
 namespace ORB_SLAM2
 {

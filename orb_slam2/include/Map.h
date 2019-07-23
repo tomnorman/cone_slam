@@ -32,8 +32,10 @@
 namespace ORB_SLAM2
 {
 
-// cone colors
+/*cones*/
+//cone colors
 enum Color {YELLOWC = 0, BLUEC};
+/**/
 
 class MapPoint;
 class KeyFrame;
@@ -69,10 +71,12 @@ public:
     // This avoid that two points are created simultaneously in separate threads (id conflict)
     std::mutex mMutexPointCreation;
 
-    /*Cone stuff*/
-    // return vector with only cone points
+    /*cones*/
+    //return vector with only cone points
     vector<vector<float>> GetAllConePoints();
+    //cone map points database
     set<MapPoint*> mspConePoints;
+    /**/
 
 protected:
     std::set<MapPoint*> mspMapPoints;

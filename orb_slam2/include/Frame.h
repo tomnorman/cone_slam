@@ -23,18 +23,19 @@
 
 #include <vector>
 
-#include <ros/ros.h>
-
 #include "MapPoint.h"
 #include "Thirdparty/DBoW2/DBoW2/BowVector.h"
 #include "Thirdparty/DBoW2/DBoW2/FeatureVector.h"
-#include "Thirdparty/darknet/include/yolo_v2_class.hpp"
 #include "ORBVocabulary.h"
 #include "KeyFrame.h"
 #include "ORBextractor.h"
 
-
 #include <opencv2/opencv.hpp>
+
+/*cones*/
+#include "Thirdparty/darknet/include/yolo_v2_class.hpp"
+#include <ros/ros.h>
+/**/
 
 namespace ORB_SLAM2
 {
@@ -60,7 +61,9 @@ public:
     Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeStamp, ORBextractor* extractor,ORBVocabulary* voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth);
 
     // Constructor for Monocular cameras.
+    /*cones*/
     Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extractor,ORBVocabulary* voc, cv::Mat &K, cv::Mat &distCoef, const float &bf, const float &thDepth, Detector* detector, const double thresh, cv::Mat &detectImage);
+    /**/
 
     // Extract ORB on the image. 0 for left image and 1 for right image.
     void ExtractORB(int flag, const cv::Mat &im);
@@ -192,15 +195,16 @@ public:
 
     static bool mbInitialComputations;
 
-    // cone stuff
+    /*cones*/
+    //yolo bounding boxes
     vector<bbox_t> mvCones;
-    // Corresponds to mvKeys, if cone -> what color
+    //corresponds to mvKeys, if cone: what color
     std::vector<int> mvKeysCones;
 private:
     // fill mvKeysCones with classification
     bool PosInGrid(double x, double y, int &posX, int &posY);
     void AssignKPToYOLO();
-
+    /**/
 
 private:
 

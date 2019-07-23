@@ -188,10 +188,10 @@ public:
     const int mnMaxY;
     const cv::Mat mK;
 
-    /*Cone stuff*/
-
-    // Corresponds to mvKeys, if cone -> what color
+    /*cones*/
+    //corresponds to mvKeys, if cone: what color
     std::vector<int> mvKeysCones;
+    /**/
 
 
     // The following variables need to be accessed trough a mutex to be thread safe.

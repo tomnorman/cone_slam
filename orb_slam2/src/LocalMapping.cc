@@ -23,7 +23,7 @@
 #include "ORBmatcher.h"
 #include "Optimizer.h"
 
-#include <mutex>
+#include<mutex>
 
 namespace ORB_SLAM2
 {
@@ -183,11 +183,13 @@ void LocalMapping::MapPointCulling()
     while(lit!=mlpRecentAddedMapPoints.end())
     {
         MapPoint* pMP = *lit;
+        /*cones*/
         // dont cull if cone
         if(pMP->mnConeType != -1)
         {
             lit++;
         }
+        /**/
         else if(pMP->isBad())
         {
             lit = mlpRecentAddedMapPoints.erase(lit);
@@ -438,8 +440,9 @@ void LocalMapping::CreateNewMapPoints()
             // Triangulation is succesfull
             MapPoint* pMP = new MapPoint(x3D,mpCurrentKeyFrame,mpMap);
 
-            // if both of the points is a cone, and the same type ->
-            // make the map point a cone with the same type
+            /*cones*/
+            //if both of the key points are cones, and the same type ->
+            //make the map point a cone with the same type
             int mpConeType = mpCurrentKeyFrame->mvKeysCones[idx1];
             if (mpConeType != -1 && mpConeType == pKF2->mvKeysCones[idx2])
                 pMP->mnConeType = mpConeType;
@@ -447,7 +450,8 @@ void LocalMapping::CreateNewMapPoints()
                 pMP->mnConeType = -1; // no type
 
             // TODO:
-            // ConeType maybe problomatic, should compare to more frames?
+            // ConeType maybe problematic, should compare to more frames?
+            /**/
 
             pMP->AddObservation(mpCurrentKeyFrame,idx1);            
             pMP->AddObservation(pKF2,idx2);

@@ -20,7 +20,7 @@
 
 #include "Map.h"
 
-#include <mutex>
+#include<mutex>
 
 namespace ORB_SLAM2
 {
@@ -41,17 +41,22 @@ void Map::AddMapPoint(MapPoint *pMP)
 {
     unique_lock<mutex> lock(mMutexMap);
     mspMapPoints.insert(pMP);
+    /*cones*/
+    //insert also to cone database
     if (pMP->mnConeType != -1)
         mspConePoints.insert(pMP);
+    /**/
 }
 
 void Map::EraseMapPoint(MapPoint *pMP)
 {
     unique_lock<mutex> lock(mMutexMap);
     mspMapPoints.erase(pMP);
+    /*cones*/
+    //remove also from cone database
     if (pMP->mnConeType != -1)
         mspConePoints.erase(pMP);
-
+    /**/
     // TODO: This only erase the pointer.
     // Delete the MapPoint
 }
@@ -95,6 +100,8 @@ vector<MapPoint*> Map::GetAllMapPoints()
     return vector<MapPoint*>(mspMapPoints.begin(),mspMapPoints.end());
 }
 
+/*cones*/
+//get all cone map points as vectors and not as pointers
 vector<vector<float>> Map::GetAllConePoints()
 {
     unique_lock<mutex> lock(mMutexMap);
@@ -115,6 +122,7 @@ vector<vector<float>> Map::GetAllConePoints()
     }
     return points;
 }
+/**/
 
 long unsigned int Map::MapPointsInMap()
 {
@@ -145,14 +153,14 @@ void Map::clear()
     for(set<MapPoint*>::iterator sit=mspMapPoints.begin(), send=mspMapPoints.end(); sit!=send; sit++)
         delete *sit;
 
-    // for(set<MapPoint*>::iterator sit=mspConePoints.begin(), send=mspConePoints.end(); sit!=send; sit++)
-    //     delete *sit;
-
     for(set<KeyFrame*>::iterator sit=mspKeyFrames.begin(), send=mspKeyFrames.end(); sit!=send; sit++)
         delete *sit;
 
     mspMapPoints.clear();
+    /*cones*/
+    //clear cone vector
     mspConePoints.clear();
+    /**/
     mspKeyFrames.clear();
     mnMaxKFid = 0;
     mvpReferenceMapPoints.clear();

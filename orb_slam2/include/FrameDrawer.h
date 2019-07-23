@@ -24,12 +24,11 @@
 #include "Tracking.h"
 #include "MapPoint.h"
 #include "Map.h"
-#include "Thirdparty/darknet/include/yolo_v2_class.hpp"
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/features2d/features2d.hpp>
+#include<opencv2/core/core.hpp>
+#include<opencv2/features2d/features2d.hpp>
 
-#include <mutex>
+#include<mutex>
 
 
 namespace ORB_SLAM2
@@ -67,12 +66,6 @@ protected:
     Map* mpMap;
 
     std::mutex mMutex;
-
-    // Cone stuff
-    vector<bbox_t> mvConesBoxes;
-    vector<int> mvCones;
-    int NBoxes;
-
 };
 
 } //namespace ORB_SLAM

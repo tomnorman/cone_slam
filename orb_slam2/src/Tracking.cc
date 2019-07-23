@@ -21,23 +21,25 @@
 
 #include "Tracking.h"
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/features2d/features2d.hpp>
+#include<opencv2/core/core.hpp>
+#include<opencv2/features2d/features2d.hpp>
 
-#include "Thirdparty/darknet/include/yolo_v2_class.hpp"
+/*cones*/
+#include"Thirdparty/darknet/include/yolo_v2_class.hpp"
+/**/
 
-#include "ORBmatcher.h"
-#include "FrameDrawer.h"
-#include "Converter.h"
-#include "Map.h"
-#include "Initializer.h"
+#include"ORBmatcher.h"
+#include"FrameDrawer.h"
+#include"Converter.h"
+#include"Map.h"
+#include"Initializer.h"
 
-#include "Optimizer.h"
-#include "PnPsolver.h"
+#include"Optimizer.h"
+#include"PnPsolver.h"
 
-#include <iostream>
+#include<iostream>
 
-#include <mutex>
+#include<mutex>
 
 
 using namespace std;
@@ -50,20 +52,10 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
     mpKeyFrameDB(pKFDB), mpInitializer(static_cast<Initializer*>(NULL)), mpSystem(pSys), mpViewer(NULL),
     mpFrameDrawer(pFrameDrawer), mpMapDrawer(pMapDrawer), mpMap(pMap), mnLastRelocFrameId(0)
 {
-    // // initialize yolo detector from ros
-    // ros::NodeHandle n;
-    // n.param("/cone_slam/thresh", thresh, 0.8);
-    // n.param("/cone_slam/cfg_file", cfg_file, string("/yolov3-tiny-cones_upd.cfg"));
-    // n.param("/cone_slam/weights_file", weights_file, string("/yolov3-tiny-cones_upd_last.weights"));
-    // cout << "yolo parameters:" << endl;
-    // cout << "- thresh: " << thresh << endl;
-    // cout << "- config file: " << cfg_file << endl;
-    // cout << "- weights file: " << weights_file << endl << endl;
-
-
     // Load parameters from settings file
     cv::FileStorage fSettings(strSettingPath, cv::FileStorage::READ);
 
+    /*cones*/
     // initialize yolo detector
     string cfg_file     = fSettings["Yolo.Config"];
     string weights_file = fSettings["Yolo.Weights"];
@@ -72,7 +64,7 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
     cout << "- thresh: " << thresh << endl;
     cout << "- config file: " << cfg_file << endl;
     detector = new Detector(cfg_file, weights_file);
-
+    /**/
 
     float fx = fSettings["Camera.fx"];
     float fy = fSettings["Camera.fy"];
@@ -146,9 +138,10 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, FrameDrawer *pFrameDrawer,
 
     if(sensor==System::MONOCULAR)
         mpIniORBextractor = new ORBextractor(2*nFeatures,fScaleFactor,nLevels,fIniThFAST,fMinThFAST);
-
-    // Initialize the Publisher
+    /*cones*/
+    //initialize the Publisher
     mpPublish = new MapPublisher(mpMap);
+    /**/
 
     cout << endl  << "ORB Extractor Parameters: " << endl;
     cout << "- Number of Features: " << nFeatures << endl;
@@ -265,6 +258,8 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 {
     mImGray = im;
 
+    /*cones*/
+    //yolo is trained with color images, so supply it one
     cv::Mat detectImage; // rgb image if needed
     if(mImGray.channels()==3)
     {
@@ -297,6 +292,7 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
         mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh,detectImage);
     else
         mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh,detectImage);
+    /**/
     Track();
 
     return mCurrentFrame.mTcw.clone();
@@ -353,8 +349,10 @@ void Tracking::Track()
                         bOK = TrackReferenceKeyFrame();
                 }
 
-                // publish cones to the world
+                /*cones*/
+                //publish cones to the world
                 mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter(), mCurrentFrame.GetRotationInverse());
+                /**/
             }
             else
             {
@@ -728,8 +726,7 @@ void Tracking::CreateInitialMapMonocular()
 
     // Set median depth to 1
     float medianDepth = pKFini->ComputeSceneMedianDepth(2);
-    //float invMedianDepth = 1.0f/medianDepth;
-	float invMedianDepth = 0.04;
+    float invMedianDepth = 1.0f/medianDepth;
 
     if(medianDepth<0 || pKFcur->TrackedMapPoints(1)<100)
     {
