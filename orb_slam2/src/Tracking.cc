@@ -261,6 +261,7 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
     /*cones*/
     //yolo is trained with color images, so supply it one
     cv::Mat detectImage; // rgb image if needed
+
     if(mImGray.channels()==3)
     {
         if(mbRGB)
@@ -324,6 +325,11 @@ void Tracking::Track()
     }
     else
     {
+        /*cones*/
+        //publish cones to the world
+        mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter(), mCurrentFrame.GetRotationInverse());
+        /**/
+        
         // System is initialized. Track Frame.
         bool bOK;
 
@@ -348,11 +354,6 @@ void Tracking::Track()
                     if(!bOK)
                         bOK = TrackReferenceKeyFrame();
                 }
-
-                /*cones*/
-                //publish cones to the world
-                mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter(), mCurrentFrame.GetRotationInverse());
-                /**/
             }
             else
             {

@@ -37,6 +37,10 @@ cd orb_slam2
 ./build.sh
 catkin build
 echo 'source ~/formula_ws/devel/setup.bash' >> ~/.bashrc
+roscd servo_orb/Thirdparty/darknet/yolo_config/
+chmod +x ./*
+roscd servo_orb/ros/cfg/
+chmod +x ./* 
 exit
 
 RUN:

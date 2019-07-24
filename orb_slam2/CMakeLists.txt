@@ -44,17 +44,6 @@ endif()
 find_package(Eigen3 REQUIRED)
 find_package(Pangolin REQUIRED)
 
-# add_message_files(
-#   FILES
-#   slam_map.msg
-# )
-
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-#   geometry_msgs
-# )
-
 catkin_package()
 
 
