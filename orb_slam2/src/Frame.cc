@@ -84,10 +84,6 @@ Frame::Frame(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timeSt
     threadRight.join();
 
     N = mvKeys.size();
-    /*cones*/
-    //preallocate space
-    mvKeysCones.assign(N, -1);
-    /**/
 
     if(mvKeys.empty())
         return;
@@ -143,10 +139,6 @@ Frame::Frame(const cv::Mat &imGray, const cv::Mat &imDepth, const double &timeSt
     ExtractORB(0,imGray);
 
     N = mvKeys.size();
-    /*cones*/
-    //preallocate space
-    mvKeysCones.assign(N, -1);
-    /**/
 
     if(mvKeys.empty())
         return;
@@ -249,6 +241,7 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     AssignKPToYOLO();
     /**/
 }
+
 /*cones*/
 //foreach bounding box yolo supplied:
 //  get all Cells (orbslam made those cells) it contains

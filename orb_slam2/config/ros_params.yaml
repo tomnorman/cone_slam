@@ -1,6 +1,6 @@
 orb_slam2: {
-#image_topic: "/camera/color/image_raw", #topic to get image, realsense
-image_topic: "/zed_node/rgb_raw/image_raw_color", #topic to get image, zed
+image_topic: "/camera/color/image_raw", #topic to get image, realsense
+#image_topic: "/zed_node/rgb_raw/image_raw_color", #topic to get image, zed
 crop_scale: 1, #crop the image- 1:no crop
 points_topic: "points_map", #topic for MapPublisher to publish
 RAW: 1 #data type of image_topic. 0-CompressedImage, 1-Image
