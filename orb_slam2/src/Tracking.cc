@@ -325,11 +325,6 @@ void Tracking::Track()
     }
     else
     {
-        /*cones*/
-        //publish cones to the world
-        mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter(), mCurrentFrame.GetRotationInverse());
-        /**/
-        
         // System is initialized. Track Frame.
         bool bOK;
 
@@ -338,7 +333,6 @@ void Tracking::Track()
         {
             // Local Mapping is activated. This is the normal behaviour, unless
             // you explicitly activate the "only tracking" mode.
-
             if(mState==OK)
             {
                 // Local Mapping might have changed some MapPoints tracked in last frame
@@ -460,6 +454,11 @@ void Tracking::Track()
         // If tracking were good, check if we insert a keyframe
         if(bOK)
         {
+            /*cones*/
+            //publish cones to the world
+            mpPublish->PublishPoints(mCurrentFrame.GetCameraCenter(), mCurrentFrame.GetRotationInverse());
+            /**/
+            
             // Update motion model
             if(!mLastFrame.mTcw.empty())
             {
