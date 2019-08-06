@@ -1,4 +1,12 @@
-/rosbags_records
-/BagFromImages
-/realsense
-/realsense-ros-2.2.4
+*.so
+*.o
+*.settings.xml
+*.log
+*.cmake
+*.make
+*.bag
+libDBoW2.so
+libg2o.so
+ORBvoc.txt
+build
+KeyFrameTrajectory.txt

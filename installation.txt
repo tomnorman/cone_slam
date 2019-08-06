@@ -18,6 +18,8 @@ DEPENDENCIES:
 
 	ROS: kinetic
 	http://wiki.ros.org/ROS/Installation
+	sudo apt-get install ros-kinetic-image-common
+	sudo apt-get install ros-kinetic-image-pipeline
 
 	PYTHON: can use conda
 	sudo apt install python-pip
@@ -39,10 +41,16 @@ catkin build
 echo 'source ~/formula_ws/devel/setup.bash' >> ~/.bashrc
 exit
 
+YOLO:
+compile yolo darknet
+https://github.com/AlexeyAB/darknet
+with .so file, name it 'libdarklib.so'
+and move 'libdarklib.so' to "formula_ws/src/cone_slam2/servo_orb/Thirdparty/darknet/lib"
+
 RUN:
 roslaunch realsense2_camera rs_camera.launch # realsense
 roslaunch zed_wrapper zed.launch # zed
-roslaunch orb_slam2 slam.launch
+roslaunch orb_slam2 stereo_slam.launch
 roslaunch cones_map map.launch
 roslaunch slam_test test.launch
 
