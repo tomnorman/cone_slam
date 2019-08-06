@@ -11,6 +11,7 @@ set(PACKAGE_DEPENDENCIES
   cmake_modules
   std_msgs
   custom_msgs
+  message_filters
 )
 
 find_package(catkin REQUIRED COMPONENTS ${PACKAGE_DEPENDENCIES})
@@ -97,17 +98,17 @@ ${PROJECT_SOURCE_DIR}/Thirdparty/darknet/lib/libdarklib.so
 )
 
 add_executable(mono
-ros/ros_mono.cc
+ros/src/ros_mono.cc
 )
 target_link_libraries(mono
 ${catkin_LIBRARIES}
 ${PROJECT_NAME}
 )
 
-# add_executable(mono_kitti
-# Examples/mono_kitti.cc
-# )
-# target_link_libraries(mono_kitti 
-# ${catkin_LIBRARIES}
-# ${PROJECT_NAME}
-# )
+add_executable(stereo
+ros/src/ros_stereo.cc
+)
+target_link_libraries(stereo
+${catkin_LIBRARIES}
+${PROJECT_NAME}
+)

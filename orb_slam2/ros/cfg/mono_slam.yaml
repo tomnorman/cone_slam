@@ -5,35 +5,41 @@
 #--------------------------------------------------------------------------------------------
 
 # Camera calibration and distortion parameters (OpenCV)
-# airsim
-# Camera.fx: 640.0
-# Camera.fy: 640.0
-# Camera.cx: 640.0
-# Camera.cy: 360.0
+# AirAim
+#Camera.fx: 640.0
+#Camera.fy: 640.0
+#Camera.cx: 640.0
+#Camera.cy: 360.0
 
-# realsense
-Camera.fx: 641.057
-Camera.fy: 641.057
-Camera.cx: 631.513
-Camera.cy: 353.617
+# ZEDM HD
+#Camera.fx: 704.177734375
+#Camera.fy: 704.177734375
+#Camera.cx: 636.210693359375
+#Camera.cy: 373.1781921386719
+#Camera.width: 1280
+#Camera.height: 720
+
+# ZEDM VGA
+Camera.fx: 350.1471252441406
+Camera.fy: 350.1471252441406
+Camera.cx: 333.4632568359375
+Camera.cy: 193.79367065429688
+Camera.width: 672
+Camera.height: 376
+
+# RealSense
+#Camera.fx: 641.057
+#Camera.fy: 641.057
+#Camera.cx: 631.513
+#Camera.cy: 353.617
+
 Camera.k1: 0.0
 Camera.k2: 0.0
 Camera.p1: 0.0
 Camera.p2: 0.0
 
-# mini zed camera
-# Camera.fx: 700.515
-# Camera.fy: 700.515
-# Camera.cx: 650.666
-# Camera.cy: 374.031
-# Camera.k1: -0.175442
-# Camera.k2: 0.0283502
-# Camera.p1: 0.0
-# Camera.p2: 0.0
-
-
 # Camera frames per second 
-Camera.fps: 10.0
+Camera.fps: 30.0
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1

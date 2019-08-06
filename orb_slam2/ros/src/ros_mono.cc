@@ -29,13 +29,8 @@
 
 #include <opencv2/core/core.hpp>
 
-#include "../include/System.h"
+#include<include/System.h>
 using namespace std;
-
-// global
-double crop;
-string image_topic;
-int RAW;
 
 class ImageGrabber
 {
@@ -67,13 +62,11 @@ int main(int argc, char **argv)
 
     // ROS parameters
     ros::NodeHandle nodeHandler;
+    string image_topic;
     nodeHandler.param("/orb_slam2/image_topic", image_topic, string("/camera/image_raw"));
-    nodeHandler.param("/orb_slam2/RAW", RAW, 0);
+
     ros::Subscriber sub;
-    if(RAW)
-        sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImageRaw, &igb);
-    else
-        sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImage, &igb);
+    sub = nodeHandler.subscribe(image_topic, 10, &ImageGrabber::GrabImage, &igb);
     ros::spin();
 
     // Stop all threads

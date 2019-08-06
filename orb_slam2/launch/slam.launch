@@ -1,7 +1,0 @@
-<launch>
-
-	<rosparam command="load" file="$(find orb_slam2)/config/ros_params.yaml" />
-
-	<node pkg="orb_slam2" type="mono" name="mono" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find orb_slam2)/config/slam_info.yaml" />
-
-</launch>

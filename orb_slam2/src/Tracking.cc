@@ -188,15 +188,21 @@ cv::Mat Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat &imRe
     mImGray = imRectLeft;
     cv::Mat imGrayRight = imRectRight;
 
+    /*cones*/
+    //yolo is trained with color images, so supply it one
+    cv::Mat detectImage; // rgb image if needed
+
     if(mImGray.channels()==3)
     {
         if(mbRGB)
         {
+            detectImage = mImGray.clone(); //for detector
             cvtColor(mImGray,mImGray,CV_RGB2GRAY);
             cvtColor(imGrayRight,imGrayRight,CV_RGB2GRAY);
         }
         else
         {
+            cvtColor(mImGray,detectImage,CV_BGR2RGB); //for detector
             cvtColor(mImGray,mImGray,CV_BGR2GRAY);
             cvtColor(imGrayRight,imGrayRight,CV_BGR2GRAY);
         }
@@ -205,17 +211,20 @@ cv::Mat Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat &imRe
     {
         if(mbRGB)
         {
+            cvtColor(mImGray,detectImage,CV_RGBA2RGB); //for detector
             cvtColor(mImGray,mImGray,CV_RGBA2GRAY);
             cvtColor(imGrayRight,imGrayRight,CV_RGBA2GRAY);
         }
         else
         {
+            cvtColor(mImGray,detectImage,CV_BGRA2RGB); //for detector
             cvtColor(mImGray,mImGray,CV_BGRA2GRAY);
             cvtColor(imGrayRight,imGrayRight,CV_BGRA2GRAY);
         }
     }
 
-    mCurrentFrame = Frame(mImGray,imGrayRight,timestamp,mpORBextractorLeft,mpORBextractorRight,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
+    mCurrentFrame = Frame(mImGray,imGrayRight,timestamp,mpORBextractorLeft,mpORBextractorRight,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth,detector,thresh,detectImage);
+    /**/
 
     Track();
 
