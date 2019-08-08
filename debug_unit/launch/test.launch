@@ -1,0 +1,6 @@
+<launch>
+
+	<node pkg="debug_unit" type="rviz.py" name="debug_unit" output="screen"/>
+	<!-- <node pkg="debug_unit" type="alon.py" name="alon_debug" output="screen"/> -->
+
+</launch>

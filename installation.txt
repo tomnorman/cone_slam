@@ -18,8 +18,9 @@ DEPENDENCIES:
 
 	ROS: kinetic
 	http://wiki.ros.org/ROS/Installation
-	sudo apt-get install ros-kinetic-image-common
-	sudo apt-get install ros-kinetic-image-pipeline
+
+	for debug_unit:
+	sudo apt-get install ros-kinetic-common-msgs
 
 	PYTHON: can use conda
 	sudo apt install python-pip

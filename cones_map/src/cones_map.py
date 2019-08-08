@@ -56,8 +56,6 @@ class Server:
         blue_points = blue_points*self.normalize_factor
 
         pose2D = np.array([msg.pos_x, msg.pos_z])
-        print('2D position ', pose2D)
-        
         pose2D = pose2D*self.normalize_factor
 
         normal2D = np.array([msg.normal_x, msg.normal_z])
@@ -106,6 +104,7 @@ class Server:
         if yellow_cones.size and blue_cones.size:
             Cones=np.vstack((yellow_cones, blue_cones))
         if Cones.shape[0] > 0:
+            test_pub.publish(test_msg)
             car_pos=np.array([pose2D[0],pose2D[1]]) 
             ConesR=Cones[:,:2]-car_pos #vectors of cones relative to car
             SqDistance=np.diag(np.matmul(ConesR,np.transpose(ConesR)))
