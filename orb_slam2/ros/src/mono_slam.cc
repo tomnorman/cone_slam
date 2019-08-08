@@ -37,8 +37,7 @@ class ImageGrabber
 public:
     ImageGrabber(ORB_SLAM2::System* pSLAM):mpSLAM(pSLAM){}
 
-    void GrabImage(const sensor_msgs::CompressedImageConstPtr& msg);
-    void GrabImageRaw(const sensor_msgs::ImageConstPtr& msg);
+    void GrabImage(const sensor_msgs::ImageConstPtr& msg);
 
     ORB_SLAM2::System* mpSLAM;
     
@@ -80,15 +79,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void ImageGrabber::GrabImage(const sensor_msgs::CompressedImageConstPtr& msg)
-{
-    cv::Mat image_mat = cv::imdecode(cv::Mat(msg->data),1);
-
-    // Pass the image to the SLAM system
-    mpSLAM->TrackMonocular(image_mat,msg->header.stamp.toSec());
-}
-
-void ImageGrabber::GrabImageRaw(const sensor_msgs::ImageConstPtr& msg)
+void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
 {
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptr;

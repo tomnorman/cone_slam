@@ -98,7 +98,7 @@ ${PROJECT_SOURCE_DIR}/Thirdparty/darknet/lib/libdarklib.so
 )
 
 add_executable(mono
-ros/src/ros_mono.cc
+ros/src/mono_slam.cc
 )
 target_link_libraries(mono
 ${catkin_LIBRARIES}
@@ -106,7 +106,7 @@ ${PROJECT_NAME}
 )
 
 add_executable(stereo
-ros/src/ros_stereo.cc
+ros/src/stereo_slam.cc
 )
 target_link_libraries(stereo
 ${catkin_LIBRARIES}
