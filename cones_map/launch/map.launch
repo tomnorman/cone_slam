@@ -1,6 +1,6 @@
 <launch>
 
-	<rosparam command="load" file="$(find cones_map)/config/ros_params.yaml" />
+	<rosparam command="load" file="$(find cones_map)/cfg/ros_params.yaml" />
 
 	<node pkg="cones_map" type="cones_map.py" name="cones_map" output="screen"/>
 

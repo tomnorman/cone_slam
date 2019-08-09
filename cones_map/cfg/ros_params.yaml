@@ -1,4 +1,5 @@
 cones_map: {
 cones_topic: "carPoseForPurePursuit",
-test_topic: "slam_test"
+debug_topic: "slam_debug",
+calibration_meters: 1.6
 }

@@ -33,27 +33,28 @@ def create_centers(samples, eps, min_samples):
         return np.array(centers)
 
 class Server:
-    def __init__(self, calibration_meters):
+    def __init__(self):
         self.calibrated = -1
         self.normalize_factor = 1
-        self.calibration_meters = calibration_meters
-        self.eps = 0.5 #DBSCAN
-        self.min_samples = 3 #DBSCAN
-        self.yellow = 121 #number to identify yellow cone
-        self.blue = 98 #number to identify blue cone
         
     def callBack(self,msg):
-        if self.calibrated != 1:
-            return self.calibration(msg)
-        
-        NYELLOW = len(msg.yellow_x)
-        NBLUE = len(msg.blue_x)
+#        self.normalize_factor = 1
+        # DBSCAN consts
+        eps = 0.5
+        min_samples = 3
+
+        yellow = 121 #number to identify cone
+        blue = 98 #number to identify cone
+
+        NYELLOW = msg.NYELLOW
+        NBLUE = msg.NBLUE
 
         yellow_points = np.array([np.array(msg.yellow_x), np.array(msg.yellow_y)]).T
-        yellow_points = yellow_points*self.normalize_factor
         blue_points = np.array([np.array(msg.blue_x), np.array(msg.blue_y)]).T
-        blue_points = blue_points*self.normalize_factor
         
+        yellow_points = yellow_points*self.normalize_factor
+        blue_points = blue_points*self.normalize_factor
+
         pose2D = np.array([msg.pos_x, msg.pos_z])
         pose2D = pose2D*self.normalize_factor
 
@@ -62,19 +63,23 @@ class Server:
         
         theta = np.arctan2(normal2D[1], normal2D[0])
 
+        yellow_cones = np.empty([1,3])
+        blue_cones = np.empty([1,3])
+
         YCONES = 0
         BCONES = 0
         if NYELLOW:
-            yellow_cones = create_centers(yellow_points, self.eps, self.min_samples)
+            yellow_cones = create_centers(yellow_points, eps, min_samples)
             YCONES = yellow_cones.shape[0]
             if YCONES:
-                yellow_cones = np.hstack((yellow_cones, np.full((YCONES, 1), self.yellow))) #x,y,color
+                yellow_cones = np.hstack((yellow_cones, np.full((YCONES, 1), yellow))) #x,y,color
         if NBLUE:
-            blue_cones = create_centers(blue_points, self.eps, self.min_samples)
+            #print create_centers(blue_points, eps, min_samples)
+            blue_cones = create_centers(blue_points, eps, min_samples)
             BCONES = blue_cones.shape[0]
             if BCONES:
-                blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), self.blue))) #x,y,color
-
+                blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), blue))) #x,y,color
+            
         debug_msg = slam_debug_msg()
         debug_msg.pos_x = pose2D[0]
         debug_msg.pos_y = pose2D[1]
@@ -93,67 +98,91 @@ class Server:
         if BCONES:
             debug_msg.blue_cones_x = blue_cones[:,0].tolist()
             debug_msg.blue_cones_y = blue_cones[:,1].tolist()
-        debug_pub.publish(debug_msg)
 
+        #print yellow_cones.shape, blue_cones.shape
+        Cones = np.array([])
         if yellow_cones.size and blue_cones.size:
             Cones=np.vstack((yellow_cones, blue_cones))
-            ConesR=Cones[:,:2]-pose2D #vectors of cones relative to car
+        if Cones.shape[0] > 0:
+            debug_pub.publish(debug_msg)
+            car_pos=np.array([pose2D[0],pose2D[1]]) 
+            ConesR=Cones[:,:2]-car_pos #vectors of cones relative to car
             SqDistance=np.diag(np.matmul(ConesR,np.transpose(ConesR)))
             minR=(min(SqDistance))**0.5
+            
             MapTrack = OrderConesDT.MapTrack(Cones, pose2D, normal2D,SphereR=10,CarLength=1.6)  # Build class               
+
+    
             MapTrack.OrderCones(MaxItrAmnt=20, CostThreshold=-0.2, ColorCostWeight=0.4, \
                    RRatioThreshold=10)
+
             mid_points = MapTrack.FindMidPoints()
 
-            if mid_points is not None:
-                debug_msg.mid_points_x = mid_points[:,0].tolist()
-                debug_msg.mid_points_y = mid_points[:,1].tolist()
+            #Lb is car length
+            PP=PurePursuit.PPAckerman(pose2D,normal2D,mid_points,Lb=1.6,SymSteeringAngleBounds=12*3.1415/180,SphereR=10)         
 
+            #print(round(24-PP.SteeringAngle*180/np.pi))
+                
+
+            if mid_points is None:
+                mid_points = np.zeros((2,2))
+
+            debug_msg.mid_points_x = mid_points[:,0].tolist()
+            debug_msg.mid_points_y = mid_points[:,1].tolist()
             debug_pub.publish(debug_msg)
 
-            # # msg to pure_pursuit
-            # out_msg = path_array()
-            # out_msg.x = pose2D[0]
-            # out_msg.y = pose2D[1]
-            # out_msg.theta = 24*np.pi/180 -PP.SteeringAngle
-            # out_msg.x_cones = mid_points[:,0].tolist()
-            # out_msg.y_cones = mid_points[:,1].tolist()
-            # pub.publish(out_msg)
+            # msg to pure_pursuit
+            out_msg = path_array()
+            out_msg.x = pose2D[0]
+            out_msg.y = pose2D[1]
+            out_msg.theta = 24*np.pi/180 -PP.SteeringAngle
+            out_msg.x_cones = mid_points[:,0].tolist()
+            out_msg.y_cones = mid_points[:,1].tolist()
+            pub.publish(out_msg)
+            
 
     def calibration(self,msg):
         if self.calibrated==-1:
-            print 'first location, press "1" and enter'
-            if '1' in raw_input():
-                print('now move 1.6 meters')
+            print 'first_input'
+            inp = raw_input()
+            if 'calib' in inp:
+                print('stage1')
                 self.pose_x1 = msg.pos_x
                 self.pose_y1 = msg.pos_z
                 self.calibrated = 0
                 return
-
+    
         if self.calibrated==0:
-            print 'second location, press "2" and enter'
-            if '2' in raw_input():
+            print 'second_input'
+            inp = raw_input()
+            if 'calib' in inp:
                 self.pose_x2 = msg.pos_x
                 self.pose_y2 = msg.pos_z
-                self.normalize_factor = self.calibration_meters / np.sqrt((self.pose_y1-self.pose_y2)**2 + (self.pose_x1-self.pose_x2)**2)
-                print(self.normalize_factor)
+                self.normalize_factor = 1.6 / np.sqrt((self.pose_y1-self.pose_y2)**2 + (self.pose_x1-self.pose_x2)**2)
+        
+                print self.normalize_factor
                 self.calibrated=1
+
+
+
+    
+
 
 if __name__ == '__main__':
 
-    rospy.init_node('cone_map', anonymous = True)
-    calibration_meters = rospy.get_param('/cones_map/calibration_meters', 1.5)
+    rospy.init_node('listener', anonymous = True)
 
-    server = Server(calibration_meters)
+    server = Server()
 
     # get points cluster from orbslam
     topic_in = rospy.get_param('/orb_slam2/points_topic', 'points_map')
-    rospy.Subscriber(topic_in, slam_in, server.callBack, queue_size = 10)
+    rospy.Subscriber(topic_in, slam_in, server.callBack)
+    rospy.Subscriber(topic_in, slam_in, server.calibration, queue_size = 1)
     
     # topic to send output of Alon
-    # topic_out = rospy.get_param('/cones_map/cones_topic', 'carPoseForPurePursuit')
-    # pub = rospy.Publisher(topic_out, path_array, queue_size = 100)
-    # rviz debug
+    topic_out = rospy.get_param('/cones_map/cones_topic', 'carPoseForPurePursuit')
+    pub = rospy.Publisher(topic_out, path_array, queue_size = 100)
+    # topic to send to plotter
     topic_debug_out = rospy.get_param('/cones_map/debug_topic', 'slam_debug')
     debug_pub = rospy.Publisher(topic_debug_out, slam_debug_msg, queue_size = 100)
 
