@@ -190,13 +190,12 @@ cv::Mat Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat &imRe
 
     /*cones*/
     //yolo is trained with color images, so supply it one
-    cv::Mat detectImage; // rgb image if needed
+    cv::Mat detectImage(mImGray); // rgb image if needed
 
     if(mImGray.channels()==3)
     {
         if(mbRGB)
         {
-            detectImage = mImGray.clone(); //for detector
             cvtColor(mImGray,mImGray,CV_RGB2GRAY);
             cvtColor(imGrayRight,imGrayRight,CV_RGB2GRAY);
         }

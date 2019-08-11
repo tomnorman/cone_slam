@@ -35,16 +35,16 @@ Visualization Manager:
       Enabled: true
       Length: 1.60000002
       Name: Formula Axes
-      Radius: 0.699999988
+      Radius: 0.100000001
       Reference Frame: formula
       Value: true
     - Class: rviz/Axes
-      Enabled: true
+      Enabled: false
       Length: 1
       Name: World Axes
       Radius: 0.100000001
       Reference Frame: world
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -165,6 +165,14 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: visualization_marker
+      Name: Marker
+      Namespaces:
+        mid_points: true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -199,11 +207,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 10.9790764
+      Scale: 113.258316
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: 21.4901447
-      Y: 3.10766029
+      X: 2.0243597
+      Y: 2.77732038
     Saved: ~
 Window Geometry:
   Displays:

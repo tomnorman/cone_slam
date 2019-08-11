@@ -4,12 +4,14 @@ import numpy as np
 import rospy
 from tf2_ros import TransformBroadcaster
 from tf_conversions import transformations
-from std_msgs.msg import Header
-from geometry_msgs.msg import TransformStamped
+from std_msgs.msg import Header, ColorRGBA
+from geometry_msgs.msg import TransformStamped, Vector3, Point
 from custom_msgs.msg import slam_debug_msg
 from sensor_msgs import point_cloud2
 from sensor_msgs.msg import PointCloud2, PointField
+from visualization_msgs.msg import Marker
 
+i = 0
 
 def publish_to_rviz(msg):
     header = Header()
@@ -56,20 +58,32 @@ def publish_to_rviz(msg):
     blue_cones = [[x,y,0] for x,y in zip(msg.blue_cones_x,msg.blue_cones_y)]
     blue_cones_msg = point_cloud2.create_cloud(header, fields, blue_cones)
     blue_cones_pub.publish(blue_cones_msg)
+
     # mid points
-    mid_points = [[x,y,0] for x,y in zip(msg.mid_points_x,msg.mid_points_y)]
-    mid_points_msg = point_cloud2.create_cloud(header, fields, mid_points)
-    mid_points_pub.publish(mid_points_msg)
+    global i
+    mid_points = Marker()
+    mid_points.header = header
+    mid_points.id = i
+    i += 1
+    i %= 100 #to bound i
+    mid_points.ns = 'mid_points'
+    mid_points.type = mid_points.LINE_STRIP
+    mid_points.scale = Vector3(0.1,1,1)
+    mid_points.lifetime = rospy.Duration.from_sec(0.5)
+    #mid_points.frame_locked
+    points = [Point(x,y,0) for (x,y) in zip(msg.mid_points_x,msg.mid_points_y)]
+    mid_points.points = points
+    mid_points.colors = [ColorRGBA(1,1,1,1) for j in range(len(points))]
+    mid_points_pub.publish(mid_points)
 
 
 if __name__ == '__main__':
     rospy.init_node('debug_unit')
     topic_in = rospy.get_param('/cones_map/debug_topic', 'slam_debug')
     rospy.Subscriber(topic_in, slam_debug_msg , publish_to_rviz)
-    # markers_pub = rospy.Publisher("visualization_marker_array", MarkerArray, queue_size = 100)
-    yellow_cloud_pub = rospy.Publisher('yellow_cluster', PointCloud2, queue_size = 100)
-    yellow_cones_pub = rospy.Publisher('yellow_cones', PointCloud2, queue_size = 100)
-    blue_cloud_pub = rospy.Publisher('blue_cluster', PointCloud2, queue_size = 100)
-    blue_cones_pub = rospy.Publisher('blue_cones', PointCloud2, queue_size = 100)
+    yellow_cloud_pub = rospy.Publisher('yellow_cluster', PointCloud2, queue_size = 20)
+    yellow_cones_pub = rospy.Publisher('yellow_cones', PointCloud2, queue_size = 20)
+    blue_cloud_pub = rospy.Publisher('blue_cluster', PointCloud2, queue_size = 20)
+    blue_cones_pub = rospy.Publisher('blue_cones', PointCloud2, queue_size = 20)
+    mid_points_pub = rospy.Publisher('visualization_marker', Marker, queue_size = 20)
     rospy.spin()
-   

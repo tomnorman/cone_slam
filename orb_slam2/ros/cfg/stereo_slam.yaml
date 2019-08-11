@@ -15,25 +15,35 @@
 #Camera.height: 720
 
 # ZEDM VGA
-Camera.fx: 350.1471252441406
-Camera.fy: 350.1471252441406
-Camera.cx: 333.4632568359375
-Camera.cy: 193.79367065429688
-Camera.width: 672
-Camera.height: 376
+#Camera.fx: 350.1471252441406
+#Camera.fy: 350.1471252441406
+#Camera.cx: 333.4632568359375
+#Camera.cy: 193.79367065429688
+
+
+# SERVO.bag
+Camera.fx: 471.547836
+Camera.fy: 471.547836
+Camera.cx: 396.163179
+Camera.cy: 261.288740
 
 Camera.k1: 0.0
 Camera.k2: 0.0
 Camera.p1: 0.0
 Camera.p2: 0.0
 
+Camera.width: 752
+Camera.height: 480
 
 # Camera frames per second 
-Camera.fps: 30.0
+Camera.fps: 20.0
+
 
 # stereo baseline times fx
 # ZEDM
-Camera.bf: 63.0018
+#Camera.bf: 63.0018
+# SERVO.bag
+Camera.bf: 51.817399
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
@@ -109,7 +119,7 @@ ORBextractor.nLevels: 8
 # Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
 # You can lower these values if your images have low contrast			
 ORBextractor.iniThFAST: 20
-ORBextractor.minThFAST: 7
+ORBextractor.minThFAST: 5
 
 #--------------------------------------------------------------------------------------------
 # Viewer Parameters
@@ -117,7 +127,7 @@ ORBextractor.minThFAST: 7
 Viewer.KeyFrameSize: 0.05
 Viewer.KeyFrameLineWidth: 1
 Viewer.GraphLineWidth: 0.9
-Viewer.PointSize:2
+Viewer.PointSize: 2
 Viewer.CameraSize: 0.08
 Viewer.CameraLineWidth: 3
 Viewer.ViewpointX: 0
@@ -128,6 +138,6 @@ Viewer.ViewpointF: 500
 #--------------------------------------------------------------------------------------------
 # Yolo Parameters
 #--------------------------------------------------------------------------------------------
-Yolo.Config: "/home/nvidia/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj.cfg"
-Yolo.Weights: "/home/nvidia/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj_45000.weights"
+Yolo.Config: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj.cfg"
+Yolo.Weights: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj_45000.weights"
 Yolo.Thresh: 0.3
