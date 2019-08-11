@@ -96,7 +96,6 @@ roslaunch debug_unit debug.launch
 * [documented orb_slam2](https://github.com/AlejandroSilvestri/ORB_SLAM2-documented)
 * [how to write README.md](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
 
-
 ## Acknowledgments
 
 * [ORB_SLAM2](https://github.com/raulmur/ORB_SLAM2)

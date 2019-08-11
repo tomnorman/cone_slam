@@ -46,7 +46,7 @@ class Server:
     def callBack(self,msg):
         if self.calibrated != 1 and self.slam_type == 'mono':
             return self.calibration(msg)
-        
+
         NYELLOW = len(msg.yellow_x)
         NBLUE = len(msg.blue_x)
 
@@ -146,7 +146,8 @@ if __name__ == '__main__':
     calibration_meters = rospy.get_param('/cones_map/calibration_meters', 1.5)
     eps = rospy.get_param('/cones_map/eps', 0.5)
     min_samples = rospy.get_param('/cones_map/min_samples', 3)
-    slam_type = 'mono' if calibration_meters > 0 else 'stereo'
+    slam_type = rospy.get_param('/slam_type', 'none')
+    if slam_type == 'none': raise Exception('HiThere')
 
     server = Server(calibration_meters, eps, min_samples, slam_type)
 

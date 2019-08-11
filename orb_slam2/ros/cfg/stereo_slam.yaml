@@ -146,6 +146,6 @@ Viewer.ViewpointF: 500
 #--------------------------------------------------------------------------------------------
 # Yolo Parameters
 #--------------------------------------------------------------------------------------------
-Yolo.Config: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj.cfg"
-Yolo.Weights: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj_45000.weights"
+Yolo.Config: "/home/nvidia/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj.cfg"
+Yolo.Weights: "/home/nvidia/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj_45000.weights"
 Yolo.Thresh: 0.3
