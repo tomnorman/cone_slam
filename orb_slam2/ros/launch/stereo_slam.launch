@@ -2,6 +2,6 @@
 
 	<rosparam command="load" file="$(find orb_slam2)/ros/cfg/ros_params.yaml" />
 
-	<node pkg="orb_slam2" type="stereo" name="stereo_slam" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find orb_slam2)/ros/cfg/stereo_slam.yaml false" />
+	<node pkg="orb_slam2" type="stereo" name="stereo_slam" output="screen" args="$(find orb_slam2)/Vocabulary/ORBvoc.txt $(find orb_slam2)/ros/cfg/stereo_slam.yaml true" />
 
 </launch>

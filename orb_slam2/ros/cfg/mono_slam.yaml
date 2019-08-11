@@ -12,30 +12,32 @@
 #Camera.cy: 360.0
 
 # ZEDM HD
-Camera.fx: 704.177734375
-Camera.fy: 704.177734375
-Camera.cx: 636.210693359375
-Camera.cy: 373.1781921386719
-Camera.width: 1280
-Camera.height: 720
+#Camera.fx: 704.177734375
+#Camera.fy: 704.177734375
+#Camera.cx: 636.210693359375
+#Camera.cy: 373.1781921386719
+#Camera.width: 1280
+#Camera.height: 720
 
 # ZEDM VGA
-#Camera.fx: 350.1471252441406
-#Camera.fy: 350.1471252441406
-#Camera.cx: 333.4632568359375
-#Camera.cy: 193.79367065429688
-#Camera.width: 672
-#Camera.height: 376
+Camera.fx: 350.1471252441406
+Camera.fy: 350.1471252441406
+Camera.cx: 333.4632568359375
+Camera.cy: 193.79367065429688
 
 # RealSense
-# Camera.fx: 641.057
-# Camera.fy: 641.057
-# Camera.cx: 631.513
-# Camera.cy: 353.617
-# Camera.k1: 0.0
-# amera.k2: 0.0
-# amera.p1: 0.0
-# amera.p2: 0.0
+#Camera.fx: 641.057
+#Camera.fy: 641.057
+#Camera.cx: 631.513
+#Camera.cy: 353.617
+
+Camera.k1: 0.0
+Camera.k2: 0.0
+Camera.p1: 0.0
+Camera.p2: 0.0
+
+Camera.width: 672
+Camera.height: 376
 
 # Camera frames per second 
 Camera.fps: 30.0
@@ -80,6 +82,6 @@ Viewer.ViewpointF: 2000
 #--------------------------------------------------------------------------------------------
 # Yolo Parameters
 #--------------------------------------------------------------------------------------------
-Yolo.Config: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj.cfg"
-Yolo.Weights: "/home/tom/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj_45000.weights"
+Yolo.Config: "/home/nvidia/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj.cfg"
+Yolo.Weights: "/home/nvidia/formula_ws/src/cone_slam/orb_slam2/Thirdparty/darknet/yolo_config/yolov3-tiny_obj_45000.weights"
 Yolo.Thresh: 0.3

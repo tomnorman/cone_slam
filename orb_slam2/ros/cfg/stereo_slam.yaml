@@ -22,10 +22,16 @@
 
 
 # SERVO.bag
-Camera.fx: 471.547836
-Camera.fy: 471.547836
-Camera.cx: 396.163179
-Camera.cy: 261.288740
+#Camera.fx: 471.547836
+#Camera.fy: 471.547836
+#Camera.cx: 396.163179
+#Camera.cy: 261.288740
+
+# euroc
+Camera.fx: 435.2046959714599
+Camera.fy: 435.2046959714599
+Camera.cx: 367.4517211914062
+Camera.cy: 252.2008514404297
 
 Camera.k1: 0.0
 Camera.k2: 0.0
@@ -43,7 +49,9 @@ Camera.fps: 20.0
 # ZEDM
 #Camera.bf: 63.0018
 # SERVO.bag
-Camera.bf: 51.817399
+#Camera.bf: 51.817399
+# euroc
+Camera.bf: 47.90639384423901
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
@@ -55,8 +63,8 @@ ThDepth: 35
 # Stereo Rectification. Only if you need to pre-rectify the images.
 # Camera.fx, .fy, etc must be the same as in LEFT.P
 #--------------------------------------------------------------------------------------------
-LEFT.height: 720
-LEFT.width: 1280
+LEFT.height: 480
+LEFT.width: 752
 LEFT.D: !!opencv-matrix
    rows: 1
    cols: 5
@@ -78,8 +86,8 @@ LEFT.P:  !!opencv-matrix
    dt: d
    data: [435.2046959714599, 0, 367.4517211914062, 0,  0, 435.2046959714599, 252.2008514404297, 0,  0, 0, 1, 0]
 
-RIGHT.height: 720
-RIGHT.width: 1280
+RIGHT.height: 480
+RIGHT.width: 752
 RIGHT.D: !!opencv-matrix
    rows: 1
    cols: 5

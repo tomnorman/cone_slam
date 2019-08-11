@@ -1,5 +1,7 @@
 cones_map: {
 cones_topic: "carPoseForPurePursuit",
 debug_topic: "slam_debug",
-calibration_meters: 1.6
+calibration_meters: 1.6, #distance between calibration points, none positive for stereo
+eps: 0.5, #epsilon for DBSCAN
+min_samples: 3 #minimum sample points for DBSCAN
 }

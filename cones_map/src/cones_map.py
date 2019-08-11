@@ -33,17 +33,18 @@ def create_centers(samples, eps, min_samples):
         return np.array(centers)
 
 class Server:
-    def __init__(self, calibration_meters):
+    def __init__(self, calibration_meters, eps, min_samples, slam_type):
         self.calibrated = -1
         self.normalize_factor = 1
         self.calibration_meters = calibration_meters
-        self.eps = 0.5 #DBSCAN
-        self.min_samples = 3 #DBSCAN
+        self.eps = eps #DBSCAN
+        self.min_samples = min_samples #DBSCAN
+        self.slam_type = slam_type
         self.yellow = 121 #number to identify yellow cone
         self.blue = 98 #number to identify blue cone
         
     def callBack(self,msg):
-        if self.calibrated != 1:
+        if self.calibrated != 1 and self.slam_type == 'mono':
             return self.calibration(msg)
         
         NYELLOW = len(msg.yellow_x)
@@ -95,7 +96,7 @@ class Server:
             debug_msg.blue_cones_y = blue_cones[:,1].tolist()
         debug_pub.publish(debug_msg)
 
-        if yellow_cones.size and blue_cones.size:
+        if YCONES and BCONES:
             Cones=np.vstack((yellow_cones, blue_cones))
             ConesR=Cones[:,:2]-pose2D #vectors of cones relative to car
             SqDistance=np.diag(np.matmul(ConesR,np.transpose(ConesR)))
@@ -143,8 +144,11 @@ if __name__ == '__main__':
 
     rospy.init_node('cone_map', anonymous = True)
     calibration_meters = rospy.get_param('/cones_map/calibration_meters', 1.5)
+    eps = rospy.get_param('/cones_map/eps', 0.5)
+    min_samples = rospy.get_param('/cones_map/min_samples', 3)
+    slam_type = 'mono' if calibration_meters > 0 else 'stereo'
 
-    server = Server(calibration_meters)
+    server = Server(calibration_meters, eps, min_samples, slam_type)
 
     # get points cluster from orbslam
     topic_in = rospy.get_param('/orb_slam2/points_topic', 'points_map')
