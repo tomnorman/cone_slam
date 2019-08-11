@@ -59,7 +59,7 @@ All config files are in:
 formula_ws/src/cone_slam/orb_slam2/ros/cfg
 ```
 
-#### YOLO config, weights and threshold
+#### <ins>YOLO config, weights and threshold</ins>
 
 Open (with text editor): **mono_slam.yaml or stereo_slam.yaml**. 
 Search for 'Yolo.Config' and 'Yolo.Weights' and change
@@ -74,7 +74,7 @@ You can also change 'Yolo.Thresh' - threshold for classification.
 Open (with text editor): **mono_slam.yaml or stereo_slam.yaml**.
 Change what you need/want.
 
-#### ROS
+#### <ins>ROS</ins>
 
 Open (with text editor): **ros_params.yaml**.
 Change what you need/want.
