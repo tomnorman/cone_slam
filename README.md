@@ -69,7 +69,7 @@ Search for 'Yolo.Config' and 'Yolo.Weights' and change
 to your system path.
 You can also change 'Yolo.Thresh' - threshold for classification.
 
-#### Camera calibration and orb slam parameters
+#### <ins>Camera calibration and orb slam parameters</ins>
 
 Open (with text editor): **mono_slam.yaml or stereo_slam.yaml**.
 Change what you need/want.
