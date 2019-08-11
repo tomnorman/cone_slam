@@ -59,7 +59,7 @@ All config files are in:
 formula_ws/src/cone_slam/orb_slam2/ros/cfg
 ```
 
-**YOLO config, weights and threshold**:
+#### YOLO config, weights and threshold
 
 Open (with text editor): mono_slam.yaml or stereo_slam.yaml
 
@@ -67,13 +67,13 @@ search for 'Yolo.Config' and 'Yolo.Weights' and change '/home/nvidia/' to your s
 
 You can also change YOLO's thershold for classification in 'Yolo.Thresh'.
 
-**Camera calibration and orb slam parameters**:
+#### Camera calibration and orb slam parameters
 
 Open (with text editor): mono_slam.yaml or stereo_slam.yaml
 
 Change what you need/want.
 
-**ROS**:
+#### ROS
 
 Open (with text editor): ros_params.yaml
 
