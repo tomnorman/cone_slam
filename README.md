@@ -61,7 +61,7 @@ formula_ws/src/cone_slam/orb_slam2/ros/cfg
 
 #### YOLO config, weights and threshold
 
-Open (with text editor): mono_slam.yaml or stereo_slam.yaml. 
+Open (with text editor): **mono_slam.yaml or stereo_slam.yaml**. 
 Search for 'Yolo.Config' and 'Yolo.Weights' and change
 ```
 /home/nvidia/
@@ -71,16 +71,16 @@ You can also change 'Yolo.Thresh' - threshold for classification.
 
 #### Camera calibration and orb slam parameters
 
-Open (with text editor): mono_slam.yaml or stereo_slam.yaml.
+Open (with text editor): **mono_slam.yaml or stereo_slam.yaml**.
 Change what you need/want.
 
 #### ROS
 
-Open (with text editor): ros_params.yaml.
+Open (with text editor): **ros_params.yaml**.
 Change what you need/want.
 
 ### Cones Map
-Open (with text editor): formula_ws/src/cone_slam/cones_map/cfg/ros_params.yaml.
+Open (with text editor): **formula_ws/src/cone_slam/cones_map/cfg/ros_params.yaml**.
 Change what you need/want.
 
 ## Run
