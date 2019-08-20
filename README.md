@@ -32,7 +32,8 @@ git clone https://github.com/tomnorman/cone_slam.git
 git clone https://github.com/yardenshap/custom_msgs.git
 # compile YOLO:
 git clone https://github.com/AlexeyAB/darknet.git
-gedit darknet/Makefile
+cd darknet
+gedit Makefile
 # change those params:
 ## GPU=1
 ## CUDNN=0 #if you need
@@ -40,8 +41,9 @@ gedit darknet/Makefile
 ## LIBSO=1
 # save and exit
 make
-mv darknet/libdarknet.so darknet/libdarklib.so #renaming
-mv darknet/libdarklib.so cone_slam/orb_slam2/Thirdparty/darknet/lib #move so we can compile orb slam2
+mv libdarknet.so libdarklib.so #renaming
+mv libdarklib.so ../cone_slam/orb_slam2/Thirdparty/darknet/lib #move so we can compile orb slam2
+cd ..
 ./cone_slam/orb_slam2/build.sh
 catkin build
 echo 'source ~/formula_ws/devel/setup.bash' >> ~/.bashrc
@@ -95,6 +97,11 @@ roslaunch cones_map map.launch
 # debug node
 roslaunch debug_unit debug.launch
 ```
+
+## Cameras
+
+* [LeadSense ](http://leadsense.ilooktech.com/product?lang=en)
+* [MYNT EYE Standard](https://www.mynteye.com/products/mynt-eye-stereo-camera)
 
 ## Miscellaneous
 
