@@ -51,3 +51,8 @@ WORKDIR $CATKIN_WS/src/cone_slam/orb_slam2/
 RUN ./build.sh
 RUN echo "source $CATKIN_WS/devel/setup.bash" >> ~/.bashrc
 WORKDIR $CATKIN_WS
+
+#sudo docker build --tag=slam .
+#sudo docker run -it slam
+#catkin build
+#source ~/.bashrc
