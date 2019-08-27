@@ -1,12 +1,9 @@
 *.so
 *.o
-*.settings.xml
 *.log
 *.cmake
 *.make
 *.bag
-libDBoW2.so
-libg2o.so
+*.pyc
 ORBvoc.txt
 build
-KeyFrameTrajectory.txt
