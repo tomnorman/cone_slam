@@ -7,10 +7,10 @@ orb slam 2 + yolo + dbscan
 * C++11 or C++0x Compiler		
 * [ROS](http://wiki.ros.org/ROS/Installation)
 * [OpenCV 3](https://docs.opencv.org/master/d7/d9f/tutorial_linux_install.html) - no need if installing ros
-* [Pangolin](https://github.com/stevenlovegrove/Pangolin)
-* Eigen 3
+* [Pangolin](https://github.com/stevenlovegrove/Pangolin) - only need to clone
+* Eigen 3 + glew
 ```
-sudo apt install libeigen3-dev
+sudo apt install libeigen3-dev glew libglew-dev
 ```
 * BLAS and LAPACK (you probably have them)
 ```
@@ -28,6 +28,7 @@ mkdir formula_ws
 cd formuls_ws
 mkdir src
 cd src
+git clone https://github.com/stevenlovegrove/Pangolin.git
 git clone https://github.com/tomnorman/cone_slam.git
 git clone https://github.com/yardenshap/custom_msgs.git
 # compile YOLO:
@@ -41,10 +42,10 @@ gedit Makefile
 ## LIBSO=1
 # save and exit
 make
-mv libdarknet.so libdarklib.so #renaming
-mv libdarklib.so ../cone_slam/orb_slam2/Thirdparty/darknet/lib #move so we can compile orb slam2
-cd ..
-./cone_slam/orb_slam2/build.sh
+mkdir ../cone_slam/orb_slam2/Thirdparty/darknet/lib
+mv libdarknet.so ../cone_slam/orb_slam2/Thirdparty/darknet/lib/libdarklib.so #move so we can compile orb slam2
+cd ../cone_slam/orb_slam2
+./build.sh
 catkin build
 echo 'source ~/formula_ws/devel/setup.bash' >> ~/.bashrc
 exit
