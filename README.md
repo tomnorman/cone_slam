@@ -46,6 +46,7 @@ mkdir ../cone_slam/orb_slam2/Thirdparty/darknet/lib
 mv libdarknet.so ../cone_slam/orb_slam2/Thirdparty/darknet/lib/libdarklib.so #move so we can compile orb slam2
 cd ../cone_slam/orb_slam2
 ./build.sh
+cd ..
 catkin build
 echo 'source ~/formula_ws/devel/setup.bash' >> ~/.bashrc
 exit
@@ -101,7 +102,8 @@ roslaunch debug_unit debug.launch
 
 ## Cameras
 
-* [LeadSense ](http://leadsense.ilooktech.com/product?lang=en)
+* [ZED](https://www.stereolabs.com/)
+* [LeadSense](http://leadsense.ilooktech.com/product?lang=en)
 * [MYNT EYE Standard](https://www.mynteye.com/products/mynt-eye-stereo-camera)
 
 ## Miscellaneous
