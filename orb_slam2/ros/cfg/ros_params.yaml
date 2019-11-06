@@ -1,8 +1,8 @@
 orb_slam2: {
 # image_topic: "/camera/color/image_raw", #topic to get image, realsense
-# image_topic: "/zed/zed_node/rgb_raw/image_raw_color", #topic to get image, ZEDM
-image_topic: "/zed_node/rgb_raw/image_raw_color", #topic to get image, ZEDM, rosbag
-left_image_topic: "/cam0/image_raw", #ZEDM
-right_image_topic: "/cam1/image_raw", #ZEDM
+image_topic: "/zed/zed_node/rgb_raw/image_raw_color", #topic to get image, ZEDM
+# image_topic: "/zed_node/rgb_raw/image_raw_color", #topic to get image, ZEDM, rosbag
+left_image_topic: "/zed/zed_node/left/image_rect_color", #ZEDM
+right_image_topic: "/zed/zed_node/right/image_rect_color", #ZEDM
 points_topic: "points_map", #topic for MapPublisher to publish
 }

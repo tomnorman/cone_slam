@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 import numpy as np
-from custom_msgs.msg import slam_in, path_array, slam_debug_msg
+from custom_msgs.msg import slam_in, path_array, slam_test_msg
 from sklearn.cluster import DBSCAN
 import OrderConesDT 
 import PurePursuit
@@ -76,7 +76,7 @@ class Server:
             if BCONES:
                 blue_cones = np.hstack((blue_cones, np.full((BCONES, 1), self.blue))) #x,y,color
 
-        debug_msg = slam_debug_msg()
+        debug_msg = slam_test_msg()
         debug_msg.pos_x = pose2D[0]
         debug_msg.pos_y = pose2D[1]
         debug_msg.normal_x = normal2D[0]
@@ -160,6 +160,6 @@ if __name__ == '__main__':
     # pub = rospy.Publisher(topic_out, path_array, queue_size = 100)
     # rviz debug
     topic_debug_out = rospy.get_param('/cones_map/debug_topic', 'slam_debug')
-    debug_pub = rospy.Publisher(topic_debug_out, slam_debug_msg, queue_size = 100)
+    debug_pub = rospy.Publisher(topic_debug_out, slam_test_msg, queue_size = 100)
 
     rospy.spin()

@@ -1,5 +1,5 @@
 cones_map: {
-cones_topic: "carPoseForPurePursuit",
+cones_topic: "test",
 debug_topic: "slam_debug",
 calibration_meters: 1.6, #distance between calibration points
 eps: 0.5, #epsilon for DBSCAN
